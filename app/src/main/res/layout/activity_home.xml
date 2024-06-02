@@ -201,7 +201,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/scrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        >
+        tools:ignore="UnknownId">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/app_bar"

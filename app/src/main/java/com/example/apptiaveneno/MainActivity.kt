@@ -2,14 +2,12 @@ package com.example.apptiaveneno
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -19,14 +17,14 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
     private lateinit var edtCorreo: EditText
     private lateinit var edtClave: EditText
-    private lateinit var btnLogin: Button
+    private lateinit var btnLogin: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        edtCorreo = findViewById(R.id.username_input)
-        edtClave = findViewById(R.id.password_input)
+        edtCorreo = findViewById(R.id.editTextUsuario)
+        edtClave = findViewById(R.id.editTextContrasenia)
         btnLogin = findViewById(R.id.login_btn)
 
         btnLogin.setOnClickListener {
@@ -40,11 +38,13 @@ class MainActivity : AppCompatActivity() {
     private fun login(correo: String, clave: String) {
         GlobalScope.launch(Dispatchers.IO) {
             val success = performLogin(correo, clave)
-            if (success) {
-                startActivity(Intent(this@MainActivity, HomeActivity::class.java))
-                finish()
-            } else {
-                runOnUiThread {
+            withContext(Dispatchers.Main) {
+                if (success) {
+                    Log.d("MainActivity", "Inicio de sesión exitoso")
+                    startActivity(Intent(this@MainActivity, HomeActivity::class.java))
+                    finish()
+                } else {
+                    Log.d("MainActivity", "Credenciales incorrectas")
                     Toast.makeText(
                         applicationContext,
                         "Usuario y/o Contraseña incorrectos",
@@ -57,8 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun performLogin(correo: String, clave: String): Boolean {
         return try {
-
-            val url = URL("https://localhost:7034/api/Usuario")
+            val url = URL("https://192.168.18.6:7034/api/Usuario")
 
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -85,10 +84,12 @@ class MainActivity : AppCompatActivity() {
 
             val jsonResponse = JSONObject(response.toString())
             jsonResponse.getBoolean("success")
+        } catch (e: java.net.ConnectException) {
+            Log.e("MainActivity", "Error de conexión: ${e.message}", e)
+            false
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e("MainActivity", "Error en la conexión con la API", e)
             false
         }
     }
 }
-
