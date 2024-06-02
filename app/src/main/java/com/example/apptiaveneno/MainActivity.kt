@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun performLogin(correo: String, clave: String): Boolean {
         return try {
-            val url = URL("https://192.168.18.6:7034/api/Usuario")
+            val url = URL("https://localhost:7034/api/Usuario")
 
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
