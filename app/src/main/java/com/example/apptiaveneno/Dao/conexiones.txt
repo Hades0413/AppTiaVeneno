@@ -1,0 +1,278 @@
+MySqlUsuarioDAO
+
+package com.example.apptiaveneno.Dao;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.apptiaveneno.Data.SqlOpenHelper;
+import com.example.apptiaveneno.Entity.Usuario;
+
+public class MySqlUsuarioDAO {
+
+    SqlOpenHelper admin;
+
+    public MySqlUsuarioDAO(Context context){
+        admin = new SqlOpenHelper(context);
+    }
+
+    public int adicionarUsuario(Usuario bean) {
+        int salida = -1;
+        SQLiteDatabase bd = admin.getWritableDatabase();
+
+        ContentValues registros = new ContentValues();
+        registros.put("nombreCompleto", bean.getNombreCompleto());
+        registros.put("correo", bean.getCorreo());
+        registros.put("clave", bean.getClave());
+
+        salida = (int) bd.insert("tb_usuario", null, registros);
+        bd.close();
+
+        return salida;
+    }
+
+    public Cursor consultarUsuarioPassword(String correo, String clave) throws SQLException {
+        SQLiteDatabase db = admin.getReadableDatabase();
+
+        String[] columns = {"idUsuario", "nombreCompleto", "correo", "clave"};
+        String selection = "correo = ? AND clave = ?";
+        String[] selectionArgs = {correo, clave};
+
+        Cursor mcursor = db.query("tb_usuario", columns, selection, selectionArgs, null, null, null);
+        return mcursor;
+    }
+}
+
+
+
+//////////////////////////////////////////
+
+MySqlProductoDAO
+
+package com.example.apptiaveneno.Dao;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.apptiaveneno.Data.SqlOpenHelper;
+import com.example.apptiaveneno.Entity.Producto;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+public class MySqlProductoDAO {
+    SqlOpenHelper admin;
+
+    public MySqlProductoDAO(Context context) {
+        admin = new SqlOpenHelper(context);
+    }
+
+    public ArrayList<Producto> listaProducto() {
+        ArrayList<Producto> lista = new ArrayList<>();
+        SQLiteDatabase base = admin.getReadableDatabase();
+        Cursor filas = base.rawQuery("select IdProducto, Codigo, IdCategoria, Descripcion, PrecioCompra, PrecioVenta, Stock, FechaRegistro, RutaImagen from PRODUCTO", null);
+        while (filas.moveToNext()) {
+            Producto prod = new Producto();
+            prod.setIdProducto(filas.getInt(0));
+            prod.setCodigo(filas.getString(1));
+            prod.setIdCategoria(filas.getInt(2));
+            prod.setDescripcion(filas.getString(3));
+            prod.setPrecioCompra(filas.getDouble(4));
+            prod.setPrecioVenta(filas.getDouble(5));
+            prod.setStock(filas.getInt(6));
+            prod.setFechaRegistro(parseFecha(filas.getString(7)));
+            prod.setRutaImagen(filas.getString(8));
+            lista.add(prod);
+        }
+        filas.close();
+        base.close();
+        return lista;
+    }
+
+    public ArrayList<Producto> listaProducto(String descripcion) {
+        ArrayList<Producto> lista = new ArrayList<>();
+        SQLiteDatabase base = admin.getReadableDatabase();
+        Cursor filas = base.rawQuery("select IdProducto, Codigo, IdCategoria, Descripcion, PrecioCompra, PrecioVenta, Stock, FechaRegistro, RutaImagen from PRODUCTO where Descripcion like ?", new String[]{descripcion + "%"});
+        while (filas.moveToNext()) {
+            Producto prod = new Producto();
+            prod.setIdProducto(filas.getInt(0));
+            prod.setCodigo(filas.getString(1));
+            prod.setIdCategoria(filas.getInt(2));
+            prod.setDescripcion(filas.getString(3));
+            prod.setPrecioCompra(filas.getDouble(4));
+            prod.setPrecioVenta(filas.getDouble(5));
+            prod.setStock(filas.getInt(6));
+            prod.setFechaRegistro(parseFecha(filas.getString(7)));
+            prod.setRutaImagen(filas.getString(8));
+            lista.add(prod);
+        }
+        filas.close();
+        base.close();
+        return lista;
+    }
+
+    public int adicionarProducto(Producto prod) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put("Codigo", prod.getCodigo());
+        valores.put("IdCategoria", prod.getIdCategoria());
+        valores.put("Descripcion", prod.getDescripcion());
+        valores.put("PrecioCompra", String.valueOf(prod.getPrecioCompra()));
+        valores.put("PrecioVenta", String.valueOf(prod.getPrecioVenta()));
+        valores.put("Stock", prod.getStock());
+        valores.put("FechaRegistro", formatFecha(prod.getFechaRegistro()));
+        valores.put("RutaImagen", prod.getRutaImagen());
+        salida = (int) base.insert("PRODUCTO", null, valores);
+        base.close();
+        return salida;
+    }
+
+    public int actualizarProducto(Producto prod) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put("Codigo", prod.getCodigo());
+        valores.put("IdCategoria", prod.getIdCategoria());
+        valores.put("Descripcion", prod.getDescripcion());
+        valores.put("PrecioCompra", String.valueOf(prod.getPrecioCompra()));
+        valores.put("PrecioVenta", String.valueOf(prod.getPrecioVenta()));
+        valores.put("Stock", prod.getStock());
+        valores.put("FechaRegistro", formatFecha(prod.getFechaRegistro()));
+        valores.put("RutaImagen", prod.getRutaImagen());
+        salida = base.update("PRODUCTO", valores, "IdProducto = ?", new String[]{String.valueOf(prod.getIdProducto())});
+        base.close();
+        return salida;
+    }
+
+    public int eliminarProducto(int idProducto) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        salida = base.delete("PRODUCTO", "IdProducto = ?", new String[]{String.valueOf(idProducto)});
+        base.close();
+        return salida;
+    }
+
+    // Método para parsear la fecha de String a Date
+    private Date parseFecha(String fechaString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return dateFormat.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Método para formatear la fecha de Date a String
+    private String formatFecha(Date fecha) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(fecha);
+    }
+}
+
+
+////////////////////////////////////
+
+
+MySqlCategoriaDAO
+
+package com.example.apptiaveneno.Dao;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.apptiaveneno.Data.SqlOpenHelper;
+import com.example.apptiaveneno.Entity.Categoria;
+
+import java.util.ArrayList;
+
+public class MySqlCategoriaDAO {
+
+    SqlOpenHelper admin;
+
+    public MySqlCategoriaDAO(Context context) {
+        admin = new SqlOpenHelper(context);
+    }
+
+    public ArrayList<Categoria> listaCategoria() {
+        ArrayList<Categoria> lista = new ArrayList<>();
+        SQLiteDatabase base = admin.getReadableDatabase();
+        Cursor filas = base.rawQuery("select IdCategoria, Descripcion from CATEGORIA", null);
+        while (filas.moveToNext()) {
+            Categoria cat = new Categoria();
+            cat.setIdCategoria(filas.getInt(0));
+            cat.setDescripcion(filas.getString(1));
+            lista.add(cat);
+        }
+        filas.close();
+        base.close();
+        return lista;
+    }
+
+    public ArrayList<Categoria> listaCategoria(String descripcion) {
+        ArrayList<Categoria> lista = new ArrayList<>();
+        SQLiteDatabase base = admin.getReadableDatabase();
+        Cursor filas = base.rawQuery("select IdCategoria, Descripcion from CATEGORIA where Descripcion like ?", new String[]{descripcion + "%"});
+        while (filas.moveToNext()) {
+            Categoria cat = new Categoria();
+            cat.setIdCategoria(filas.getInt(0));
+            cat.setDescripcion(filas.getString(1));
+            lista.add(cat);
+        }
+        filas.close();
+        base.close();
+        return lista;
+    }
+
+    public Categoria listaCategoriaxCodigo(int idCategoria) {
+        Categoria cat = null;
+        SQLiteDatabase base = admin.getReadableDatabase();
+        Cursor filas = base.rawQuery("select IdCategoria, Descripcion from CATEGORIA where IdCategoria = ?", new String[]{String.valueOf(idCategoria)});
+        if (filas.moveToFirst()) {
+            cat = new Categoria();
+            cat.setIdCategoria(filas.getInt(0));
+            cat.setDescripcion(filas.getString(1));
+        }
+        filas.close();
+        base.close();
+        return cat;
+    }
+
+    public int adicionar(Categoria cat) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put("Descripcion", cat.getDescripcion());
+        salida = (int) base.insert("CATEGORIA", null, valores);
+        base.close();
+        return salida;
+    }
+
+    public int actualizar(Categoria cat) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        ContentValues valores = new ContentValues();
+        valores.put("Descripcion", cat.getDescripcion());
+        salida = base.update("CATEGORIA", valores, "IdCategoria = ?", new String[]{String.valueOf(cat.getIdCategoria())});
+        base.close();
+        return salida;
+    }
+
+    public int eliminar(int idCategoria) {
+        int salida = -1;
+        SQLiteDatabase base = admin.getWritableDatabase();
+        salida = base.delete("CATEGORIA", "IdCategoria = ?", new String[]{String.valueOf(idCategoria)});
+        base.close();
+        return salida;
+    }
+}
