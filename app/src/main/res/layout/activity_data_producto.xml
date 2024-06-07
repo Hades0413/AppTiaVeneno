@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/idDataCategoriaCodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Codigo" />
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/idRegistrar"
+        android:id="@+id/idDataCategoriaDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Descripción" />

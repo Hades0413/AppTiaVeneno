@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.retrofit.adapter.rxjava3)
 
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

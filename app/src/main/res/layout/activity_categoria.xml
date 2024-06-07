@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainCategoria">
 
     <LinearLayout
         android:layout_width="395dp"
@@ -39,18 +40,16 @@
             android:inputType="textPersonName" />
 
         <ListView
-            android:id="@+id/lstProducto"
+            android:id="@+id/listarCategoria"
             android:layout_width="match_parent"
             android:layout_height="325dp"
             android:scrollbars="vertical">
-
         </ListView>
 
         <Button
-            android:id="@+id/btnRegresarC"
+            android:id="@+id/btnRegresarCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Regresar"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
