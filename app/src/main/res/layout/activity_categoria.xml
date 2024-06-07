@@ -15,13 +15,13 @@
         tools:layout_editor_absoluteY="8dp">
 
         <Button
-            android:id="@+id/btnNuevo"
+            android:id="@+id/btnIrCrearNuevaCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nuevo" />
 
         <Button
-            android:id="@+id/btnConsultar"
+            android:id="@+id/btnConsultarCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Consultar" />
@@ -33,7 +33,7 @@
             android:text="Descripcion de Categoría" />
 
         <EditText
-            android:id="@+id/edtDescripcion"
+            android:id="@+id/idDescripcionCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

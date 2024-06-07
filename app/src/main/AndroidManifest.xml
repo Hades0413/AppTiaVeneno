@@ -54,6 +54,7 @@
             </intent-filter>
         </activity>
 
+
         <activity
             android:name=".MainCategoria"
             android:exported="true">

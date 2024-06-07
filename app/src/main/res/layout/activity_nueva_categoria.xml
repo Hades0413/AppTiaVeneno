@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,7 +33,7 @@
         app:layout_constraintVertical_bias="0.154" />
 
     <EditText
-        android:id="@+id/edtCategoria"
+        android:id="@+id/idCrearCategoriaDescripcion"
         android:layout_width="335dp"
         android:layout_height="41dp"
         android:layout_marginTop="14dp"
@@ -46,23 +47,23 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btnGrabarC"
+        android:id="@+id/btnGrabarCategoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
         android:layout_marginTop="156dp"
         android:text="Grabar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtCategoria" />
+        app:layout_constraintTop_toBottomOf="@+id/idCrearCategoriaDescripcion" />
 
     <Button
-        android:id="@+id/btnCancelarC"
+        android:id="@+id/btnVolverCategoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="156dp"
-        android:text="Cancelar"
+        android:text="Volver"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.477"
-        app:layout_constraintStart_toEndOf="@+id/btnGrabarC"
-        app:layout_constraintTop_toBottomOf="@+id/edtCategoria" />
+        app:layout_constraintStart_toEndOf="@+id/btnGrabarCategoria"
+        app:layout_constraintTop_toBottomOf="@+id/idCrearCategoriaDescripcion" />
 </androidx.constraintlayout.widget.ConstraintLayout>
