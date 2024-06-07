@@ -1,29 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/idDataCategoriaCodigo"
+        android:id="@+id/textview50"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Codigo" />
+        android:text="IdProducto" />
 
     <TextView
-        android:id="@+id/tvCodigo"
+        android:id="@+id/idDataProductoId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/idDataCategoriaDescripcion"
+        android:id="@+id/textview51"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Código" />
+
+    <TextView
+        android:id="@+id/idDataProductoCodigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textview52"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="IdCategoría" />
+
+    <TextView
+        android:id="@+id/idDataProductoIdCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textview53"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Descripción" />
 
     <TextView
-        android:id="@+id/tvDescripcion"
+        android:id="@+id/idDataProductoDescripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textview54"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Precio Compra" />
+
+    <TextView
+        android:id="@+id/idDataProductoPrecioCompra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textview55"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Precio Venta" />
+
+    <TextView
+        android:id="@+id/idDataProductoPrecioVenta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textview56"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stock" />
+
+    <TextView
+        android:id="@+id/idDataProductoStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <ImageView
+        android:id="@+id/idDataProductoRutaImagen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:srcCompat="@tools:sample/avatars" />
+
 
 </LinearLayout>

@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.retrofit.adapter.rxjava3)
 
+    implementation("com.squareup.picasso:picasso:2.71828")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

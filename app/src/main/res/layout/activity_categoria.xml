@@ -1,55 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainCategoria">
+    tools:context=".MainCategoria"
+    android:background="@color/white">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/idDescripcionCategoria"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/search_background"
+        android:drawableStart="@drawable/search"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Buscar por descripción de categoría"
+        android:inputType="textPersonName"
+        android:paddingStart="20dp"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        />
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="715dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
-
-        <Button
-            android:id="@+id/btnIrCrearNuevaCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nuevo" />
-
-        <Button
-            android:id="@+id/btnConsultarCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Consultar" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descripcion de Categoría" />
-
-        <EditText
-            android:id="@+id/idDescripcionCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
-
-        <ListView
-            android:id="@+id/listarCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="325dp"
-            android:scrollbars="vertical">
-        </ListView>
+        android:id="@+id/btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/idDescripcionCategoria"
+        android:gravity="center">
 
         <Button
             android:id="@+id/btnRegresarCategoria"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Regresar"/>
+            android:backgroundTint="@color/orange_700"
+            android:text="Regresar"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnConsultarCategoria"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange_700"
+            android:text="Consultar"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listarCategoria"
+        android:layout_marginTop="10dp"
+        android:scrollbars="vertical"
+        android:layout_below="@id/btn_container"
+        android:divider="@color/orange_200"
+        android:dividerHeight="1dp"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:elevation="4dp">
+        <Button
+            android:id="@+id/btnIrCrearNuevaCategoria"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/orange_700"
+            android:textColor="@android:color/white"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:src="@drawable/plus"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="11dp"/>
+    </FrameLayout>
+
+</RelativeLayout>
