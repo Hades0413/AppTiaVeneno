@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.apptiaveneno.Adapter.ProductoAdapter
 import kotlinx.coroutines.*
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -49,29 +51,36 @@ class MainProducto : AppCompatActivity() {
         btnConsultarProducto.setOnClickListener { consultarProducto() }
 
         listarProducto.setOnItemClickListener { parent, view, position, id ->
-            val productoSeleccionado = parent.getItemAtPosition(position) as JSONObject
-            val idProducto = productoSeleccionado.getInt("idProducto")
-            val codigo = productoSeleccionado.getString("codigo")
-            val idCategoria = productoSeleccionado.getInt("idCategoria")
-            val descripcion = productoSeleccionado.getString("descripcion")
-            val precioCompra = productoSeleccionado.getDouble("precioCompra")
-            val precioVenta = productoSeleccionado.getDouble("precioVenta")
-            val stock = productoSeleccionado.getInt("stock")
-            val rutaImagen = productoSeleccionado.getString("rutaImagen")
+            try {
+                val productoSeleccionado = parent.getItemAtPosition(position) as JSONObject
+                val idProducto = productoSeleccionado.getInt("idProducto")
+                val codigo = productoSeleccionado.getString("codigo")
+                val idCategoria = if (productoSeleccionado.has("idCategoria")) productoSeleccionado.getInt("idCategoria") else -1
+                val descripcion = productoSeleccionado.getString("descripcion")
+                val precioCompra = productoSeleccionado.getDouble("precioCompra")
+                val precioVenta = productoSeleccionado.getDouble("precioVenta")
+                val stock = productoSeleccionado.getInt("stock")
+                val rutaImagen = productoSeleccionado.getString("rutaImagen")
 
-            // Crear un intent para enviar los datos del producto a otra actividad
-            val intent = Intent(this@MainProducto, MainDatosProducto::class.java).apply {
-                putExtra("idProducto", idProducto)
-                putExtra("codigo", codigo)
-                putExtra("idCategoria", idCategoria)
-                putExtra("descripcion", descripcion)
-                putExtra("precioCompra", precioCompra)
-                putExtra("precioVenta", precioVenta)
-                putExtra("stock", stock)
-                putExtra("rutaImagen", rutaImagen)
+                // Crear un intent para enviar los datos del producto a otra actividad
+                val intent = Intent(this@MainProducto, MainDatosProducto::class.java).apply {
+                    putExtra("idProducto", idProducto)
+                    putExtra("codigo", codigo)
+                    putExtra("idCategoria", idCategoria)
+                    putExtra("descripcion", descripcion)
+                    putExtra("precioCompra", precioCompra)
+                    putExtra("precioVenta", precioVenta)
+                    putExtra("stock", stock)
+                    putExtra("rutaImagen", rutaImagen)
+                }
+                startActivity(intent)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+                // Manejar la excepción, por ejemplo, mostrar un mensaje de error
+                Toast.makeText(this@MainProducto, "Error al obtener los datos del producto", Toast.LENGTH_SHORT).show()
             }
-            startActivity(intent)
         }
+
 
 
         cargarProductos()

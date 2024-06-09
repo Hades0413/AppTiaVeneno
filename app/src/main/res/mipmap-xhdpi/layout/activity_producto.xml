@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btnIrCrearNuevaProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nuevo" />
+
+    <Button
+        android:id="@+id/btnConsultarProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Consultar" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción de Producto" />
+
+    <EditText
+        android:id="@+id/idDescripcionProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <ListView
+        android:id="@+id/listarProducto"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/btnRegresarProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regresar"/>
+
+</LinearLayout>

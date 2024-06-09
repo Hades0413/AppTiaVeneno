@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -23,8 +24,8 @@ import java.net.URL
 
 class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var idCrudIdProducto: EditText
-    private lateinit var idCrudCodigoProducto: EditText
+    private lateinit var idCrudIdProducto: TextView
+    private lateinit var idCrudCodigoProducto: TextView
     private lateinit var idCrudIdCategoriaProducto: EditText
     private lateinit var idCrudDescripcionProducto: EditText
     private lateinit var idCrudPrecioCompraProducto: EditText
@@ -56,6 +57,8 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         btnActualizarProducto = findViewById(R.id.btnActualizarProducto)
         btnEliminarProducto = findViewById(R.id.btnEliminarProducto)
         btnCrudVolverProducto = findViewById(R.id.btnCrudVolverProducto)
+
+
 
         val idProducto = intent.getIntExtra("idProducto", -1)
         val codigo = intent.getStringExtra("codigo")
@@ -131,6 +134,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
 
     private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int) {
         GlobalScope.launch(Dispatchers.IO) {
