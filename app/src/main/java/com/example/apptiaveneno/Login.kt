@@ -94,7 +94,7 @@ class Login : AppCompatActivity() {
 
     private fun performLoginWithAPI(correo: String, clave: String): Boolean {
         return try {
-            val url = URL("https://gamarraplus.somee.com/api/Usuario")
+            val url = URL("https://tiaveneno.somee.com/api/Usuario")
 
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"

@@ -86,7 +86,7 @@ class MainDatosCategoria : AppCompatActivity(), View.OnClickListener {
     private fun actualizarCategoria(idCategoria: Int, descripcion: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("https://gamarraplus.somee.com/api/Inventario/categorias/$idCategoria")
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias/$idCategoria")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "PUT"
                 conn.setRequestProperty("Content-Type", "application/json")
@@ -137,7 +137,7 @@ class MainDatosCategoria : AppCompatActivity(), View.OnClickListener {
         dialogView.findViewById<Button>(R.id.buttonAccept).setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    val url = URL("https://gamarraplus.somee.com/api/Inventario/categorias/$idCategoria")
+                    val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias/$idCategoria")
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "DELETE"
                     conn.setRequestProperty("Content-Type", "application/json")

@@ -67,7 +67,7 @@ class MainCategoria : AppCompatActivity() {
     private fun fetchCategorias() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL("https://gamarraplus.somee.com/api/Inventario/categorias")
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("Content-Type", "application/json")
@@ -101,7 +101,7 @@ class MainCategoria : AppCompatActivity() {
         if (descripcion.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val url = URL("https://gamarraplus.somee.com/api/Inventario/categorias")
+                    val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
                     conn.setRequestProperty("Content-Type", "application/json")

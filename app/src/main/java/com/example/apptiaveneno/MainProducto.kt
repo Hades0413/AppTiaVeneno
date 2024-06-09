@@ -85,7 +85,7 @@ class MainProducto : AppCompatActivity() {
 
     private fun cargarProductos() {
         GlobalScope.launch(Dispatchers.IO) {
-            val url = URL("https://gamarraplus.somee.com/api/Inventario/productos")
+            val url = URL("https://tiaveneno.somee.com/api/Inventario/productos")
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
             conn.setRequestProperty("Content-Type", "application/json")

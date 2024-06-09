@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,10 +11,21 @@
         android:id="@+id/textView12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Codigo" />
+        android:text="IdProducto" />
 
     <TextView
-        android:id="@+id/tvCodigoP"
+        android:id="@+id/idCrudIdProducto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Codigo Producto" />
+
+    <TextView
+        android:id="@+id/idCrudCodigoProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -19,10 +33,10 @@
         android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Descripción" />
+        android:text="IdCategoria" />
 
     <EditText
-        android:id="@+id/edtDescripcionPr"
+        android:id="@+id/idCrudIdCategoriaProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -32,10 +46,10 @@
         android:id="@+id/textView21"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Categoría" />
+        android:text="Descripcion" />
 
     <EditText
-        android:id="@+id/edtCategoriaP"
+        android:id="@+id/idCrudDescripcionProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -48,7 +62,7 @@
         android:text="Precio Compra" />
 
     <EditText
-        android:id="@+id/edtPrecioCompraP"
+        android:id="@+id/idCrudPrecioCompraProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -61,7 +75,7 @@
         android:text="Precio Venta" />
 
     <EditText
-        android:id="@+id/edtPrecioVentaP"
+        android:id="@+id/idCrudPrecioVentaProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -71,27 +85,20 @@
         android:id="@+id/textView24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stock Actual" />
+        android:text="Stock" />
 
     <EditText
-        android:id="@+id/edtStockActualP"
+        android:id="@+id/idCrudStockProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number" />
 
-    <TextView
-        android:id="@+id/textView25"
+    <ImageView
+        android:id="@+id/idCrudProductoRutaImagen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stock Mínimo" />
-
-    <EditText
-        android:id="@+id/edtStockMinimoP"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,14 +106,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnActualizar"
+            android:id="@+id/btnActualizarProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Actualizar" />
 
         <Button
-            android:id="@+id/btnEliminar"
+            android:id="@+id/btnEliminarProducto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -119,7 +126,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnRegresar"
+            android:id="@+id/btnCrudVolverProducto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Regresar" />

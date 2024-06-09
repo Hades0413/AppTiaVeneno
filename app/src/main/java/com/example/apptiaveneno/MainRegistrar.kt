@@ -60,7 +60,7 @@ class MainRegistrar : AppCompatActivity(), View.OnClickListener {
     private fun registrarUsuarioAPI(NombreCompleto: String, correo: String, clave: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("https://gamarraplus.somee.com/api/Usuario")
+                val url = URL("https://tiaveneno.somee.com/api/Usuario")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")

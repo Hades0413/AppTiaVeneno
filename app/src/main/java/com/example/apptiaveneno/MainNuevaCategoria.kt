@@ -64,7 +64,7 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
     private fun grabarCategoria(descripcion: String) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("https://gamarraplus.somee.com/api/Inventario/categorias")
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
