@@ -96,9 +96,9 @@ class MainCategoria : AppCompatActivity() {
     }
 
     private fun consultarCategoria() {
-        val descripcion = idDescripcionCategoria.text.toString().trim()
+        val searchQuery = idDescripcionCategoria.text.toString().trim()
 
-        if (descripcion.isNotEmpty()) {
+        if (searchQuery.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
@@ -121,9 +121,11 @@ class MainCategoria : AppCompatActivity() {
 
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
-                            if (jsonObject.getString("descripcion") == descripcion) {
+                            val descripcionCategoria = jsonObject.getString("descripcion")
+                            val idCategoria = jsonObject.getString("idCategoria")
+
+                            if (descripcionCategoria.contains(searchQuery, ignoreCase = true) || idCategoria == searchQuery) {
                                 filteredList.put(jsonObject)
-                                break // Si deseas mostrar solo el primer elemento que coincida, de lo contrario, quita el break
                             }
                         }
 
@@ -144,6 +146,7 @@ class MainCategoria : AppCompatActivity() {
             mostrarAlertaCategoriaVacia()
         }
     }
+
 
     private fun mostrarAlertaCategoriaVacia() {
         AlertDialog.Builder(this)

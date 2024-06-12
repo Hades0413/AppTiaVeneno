@@ -124,12 +124,12 @@ class MainProducto : AppCompatActivity() {
     }
 
     private fun consultarProducto() {
-        val descripcion = idDescripcionProducto.text.toString().trim()
+        val searchQuery = idDescripcionProducto.text.toString().trim()
 
-        if (descripcion.isNotEmpty()) {
+        if (searchQuery.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val url = URL("https://gamarraplus.somee.com/api/Inventario/productos")
+                    val url = URL("https://tiaveneno.somee.com/api/Inventario/productos")
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
                     conn.setRequestProperty("Content-Type", "application/json")
@@ -149,9 +149,19 @@ class MainProducto : AppCompatActivity() {
 
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
-                            if (jsonObject.getString("Descripcion") == descripcion) {
+                            val descripcion = jsonObject.getString("descripcion")
+                            val idProducto = jsonObject.getString("idProducto")
+                            val codigo = jsonObject.getString("codigo")
+                            val idCategoria = jsonObject.optInt("idCategoria", -1).toString()
+
+                            if (descripcion.contains(searchQuery, ignoreCase = true) ||
+                                idProducto.equals(searchQuery, ignoreCase = true) ||
+                                codigo.equals(searchQuery, ignoreCase = true) ||
+                                idCategoria.equals(searchQuery, ignoreCase = true)
+                            ) {
                                 filteredList.put(jsonObject)
-                                break // Si deseas mostrar solo el primer elemento que coincida, de lo contrario, quita el break
+                            } else if (codigo.contains(searchQuery, ignoreCase = true)) {
+                                filteredList.put(jsonObject)
                             }
                         }
 
@@ -172,6 +182,7 @@ class MainProducto : AppCompatActivity() {
             mostrarAlertaProductoVacio()
         }
     }
+
 
     private fun mostrarAlertaProductoVacio() {
         AlertDialog.Builder(this)
