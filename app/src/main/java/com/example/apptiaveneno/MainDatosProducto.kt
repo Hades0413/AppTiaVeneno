@@ -68,6 +68,17 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         val precioVenta = intent.getDoubleExtra("precioVenta", 0.0)
         val stock = intent.getIntExtra("stock", 0)
         val rutaImagen = intent.getStringExtra("rutaImagen")
+
+        // Verifica que los datos se recibieron correctamente
+        if (idProducto == -1 || codigo.isNullOrEmpty() || idCategoria == -1 || descripcion.isNullOrEmpty()) {
+            // Aquí puedes manejar el caso donde los datos no se recibieron correctamente
+            Toast.makeText(this, "Error al recibir los datos del producto", Toast.LENGTH_SHORT).show()
+            // Puedes finalizar la actividad si los datos son esenciales
+            finish()
+        }
+
+    // A partir de aquí, puedes utilizar los datos recibidos como idProducto, codigo, idCategoria, etc.
+
         rutaImagen?.let {
             cargarImagenDesdeUrl(it)
         }
