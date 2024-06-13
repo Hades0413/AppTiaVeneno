@@ -222,6 +222,9 @@
             android:layout_height="300dp"
             android:src="@drawable/logo_tia_modified"
 
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="seleccionarImagen"
 
             android:contentDescription="TODO"
             >

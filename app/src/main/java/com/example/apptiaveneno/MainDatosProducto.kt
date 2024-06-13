@@ -1,7 +1,9 @@
 package com.example.apptiaveneno
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -43,6 +45,10 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnActualizarProducto: Button
     private lateinit var btnEliminarProducto: Button
     private lateinit var btnCrudVolverProducto: Button
+
+
+    private val PICK_IMAGE_REQUEST = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +113,34 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         // Cargar las categorías y seleccionar la categoría correspondiente
         cargarCategoriasProducto(idCategoria)
     }
+
+
+    // Método llamado cuando se hace clic en la imagen
+    fun seleccionarImagen(view: View) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST)
+    }
+
+    // Método para manejar el resultado de la selección de imagen
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val uri: Uri? = data.data
+
+            // Aquí puedes cargar la imagen desde la URI seleccionada
+            try {
+                val inputStream = contentResolver.openInputStream(uri!!)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                idCrudProductoRutaImagen.setImageBitmap(bitmap)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
     private fun cargarCategoriasProducto(idCategoriaSeleccionada: Int) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -210,9 +244,9 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
     private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int, rutaImagen: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL("https://tiaveneno.somee.com/api/Inventario/actualizarProducto")  // Cambiar la URL según la API real
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/productos/$idProducto")  // URL con el idProducto para actualizar el producto específico
                 val conn = url.openConnection() as HttpURLConnection
-                conn.requestMethod = "POST"
+                conn.requestMethod = "PUT"  // Método PUT para actualizar datos
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
