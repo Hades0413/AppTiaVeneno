@@ -17,9 +17,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -84,6 +86,9 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             finish()
         }
 
+        // Log para verificar los datos recibidos
+        Log.d("DatosProducto", "idProducto: $idProducto, codigo: $codigo, idCategoria: $idCategoria, descripcion: $descripcion, precioCompra: $precioCompra, precioVenta: $precioVenta, stock: $stock, rutaImagen: $rutaImagen")
+
         // Cargar los datos en los componentes de la interfaz
         idCrudIdProducto.text = idProducto.toString()
         idCrudCodigoProducto.text = codigo
@@ -94,8 +99,10 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
 
         // Cargar la imagen si existe una URL válida
         rutaImagen?.let {
-            cargarImagenDesdeUrl(it)
+            // Aquí deberías cargar la imagen según la ruta proporcionada
+            cargarImagenDesdeRuta(rutaImagen)
         }
+
 
         // Cargar las categorías y seleccionar la categoría correspondiente
         cargarCategoriasProducto(idCategoria)
@@ -163,14 +170,15 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             R.id.btnActualizarProducto -> {
                 val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
                 val codigo = idCrudCodigoProducto.text.toString()
-                val idCategoria = idCrudIdCategoriaProducto.selectedItem.toString().toIntOrNull()
+                val idCategoria = idCrudIdCategoriaProducto.selectedItemPosition + 1
                 val descripcion = idCrudDescripcionProducto.text.toString()
                 val precioCompra = idCrudPrecioCompraProducto.text.toString().toDoubleOrNull()
                 val precioVenta = idCrudPrecioVentaProducto.text.toString().toDoubleOrNull()
                 val stock = idCrudStockProducto.text.toString().toIntOrNull()
+                val rutaImagen = idCrudProductoRutaImagen.tag?.toString() ?: ""  // Obtener la ruta de la imagen desde la tag del ImageView
 
                 if (idProducto != null && codigo.isNotEmpty() && idCategoria != null && descripcion.isNotEmpty() && precioCompra != null && precioVenta != null && stock != null) {
-                    actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock)
+                    actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock, rutaImagen)
                 } else {
                     Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
                 }
@@ -190,63 +198,53 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
-    private fun cargarImagenDesdeUrl(url: String) {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val url = URL(url)
-                val connection = url.openConnection() as HttpURLConnection
-                connection.doInput = true
-                connection.connect()
-                val inputStream = connection.inputStream
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                launch(Dispatchers.Main) {
-                    idCrudProductoRutaImagen.setImageBitmap(bitmap)
-                }
-            } catch (e: Exception) {
-                Log.e("Error", "Error al cargar la imagen desde la URL: ${e.message}")
-            }
+    private fun cargarImagenDesdeRuta(rutaImagen: String) {
+        val resourceId = resources.getIdentifier(rutaImagen, "drawable", packageName)
+        if (resourceId != 0) {
+            idCrudProductoRutaImagen.setImageResource(resourceId)
+        } else {
+            idCrudProductoRutaImagen.setImageResource(R.drawable.discord) // Imagen predeterminada si no se encuentra la imagen
         }
     }
 
-
-
-    private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+    private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int, rutaImagen: String) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL("https://tiaveneno.somee.com/api/Inventario/productos/$idProducto")
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/actualizarProducto")  // Cambiar la URL según la API real
                 val conn = url.openConnection() as HttpURLConnection
-                conn.requestMethod = "PUT"
+                conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
-                val jsonObject = JSONObject().apply {
+                val productoJson = JSONObject().apply {
+                    put("idProducto", idProducto)
                     put("codigo", codigo)
-                    put("idCategoria", idCategoria)
                     put("descripcion", descripcion)
                     put("precioCompra", precioCompra)
                     put("precioVenta", precioVenta)
                     put("stock", stock)
+                    put("idCategoria", idCategoria)
+                    put("rutaImagen", rutaImagen)
                 }
 
                 conn.outputStream.use { os ->
-                    val input = jsonObject.toString().toByteArray(Charsets.UTF_8)
+                    val input = productoJson.toString().toByteArray(Charsets.UTF_8)
                     os.write(input, 0, input.size)
                 }
 
                 val responseCode = conn.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    launch(Dispatchers.Main) {
+                    withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Producto actualizado correctamente", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    launch(Dispatchers.Main) {
+                    withContext(Dispatchers.Main) {
                         Log.e("Error de actualización", "No se pudo actualizar el producto. Código de respuesta: $responseCode")
                         Toast.makeText(applicationContext, "No se pudo actualizar el producto", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
-                launch(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     Log.e("Error de conexión", "Error al conectar con la API: ${e.message}")
                     Toast.makeText(applicationContext, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
                 }
@@ -254,6 +252,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
 
     private fun eliminarProducto(idProducto: Int) {
         val alertDialog = AlertDialog.Builder(this).create()
