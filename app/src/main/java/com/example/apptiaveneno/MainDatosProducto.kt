@@ -5,9 +5,11 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -18,15 +20,19 @@ import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+
 
 class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var idCrudIdProducto: TextView
     private lateinit var idCrudCodigoProducto: TextView
-    private lateinit var idCrudIdCategoriaProducto: EditText
+    private lateinit var idCrudIdCategoriaProducto: Spinner
     private lateinit var idCrudDescripcionProducto: EditText
     private lateinit var idCrudPrecioCompraProducto: EditText
     private lateinit var idCrudPrecioVentaProducto: EditText
@@ -58,8 +64,11 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         btnEliminarProducto = findViewById(R.id.btnEliminarProducto)
         btnCrudVolverProducto = findViewById(R.id.btnCrudVolverProducto)
 
+        btnActualizarProducto.setOnClickListener(this)
+        btnEliminarProducto.setOnClickListener(this)
+        btnCrudVolverProducto.setOnClickListener(this)
 
-
+        // Obtener datos del Intent
         val idProducto = intent.getIntExtra("idProducto", -1)
         val codigo = intent.getStringExtra("codigo")
         val idCategoria = intent.getIntExtra("idCategoria", -1)
@@ -69,31 +78,84 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         val stock = intent.getIntExtra("stock", 0)
         val rutaImagen = intent.getStringExtra("rutaImagen")
 
-        // Verifica que los datos se recibieron correctamente
+        // Verificar que los datos se recibieron correctamente
         if (idProducto == -1 || codigo.isNullOrEmpty() || idCategoria == -1 || descripcion.isNullOrEmpty()) {
-            // Aquí puedes manejar el caso donde los datos no se recibieron correctamente
             Toast.makeText(this, "Error al recibir los datos del producto", Toast.LENGTH_SHORT).show()
-            // Puedes finalizar la actividad si los datos son esenciales
             finish()
         }
 
-    // A partir de aquí, puedes utilizar los datos recibidos como idProducto, codigo, idCategoria, etc.
-
-        rutaImagen?.let {
-            cargarImagenDesdeUrl(it)
-        }
-
-        idCrudIdProducto.setText(idProducto.toString())
-        idCrudCodigoProducto.setText(codigo)
-        idCrudIdCategoriaProducto.setText(idCategoria.toString())
+        // Cargar los datos en los componentes de la interfaz
+        idCrudIdProducto.text = idProducto.toString()
+        idCrudCodigoProducto.text = codigo
         idCrudDescripcionProducto.setText(descripcion)
         idCrudPrecioCompraProducto.setText(precioCompra.toString())
         idCrudPrecioVentaProducto.setText(precioVenta.toString())
         idCrudStockProducto.setText(stock.toString())
 
-        btnActualizarProducto.setOnClickListener(this)
-        btnEliminarProducto.setOnClickListener(this)
-        btnCrudVolverProducto.setOnClickListener(this)
+        // Cargar la imagen si existe una URL válida
+        rutaImagen?.let {
+            cargarImagenDesdeUrl(it)
+        }
+
+        // Cargar las categorías y seleccionar la categoría correspondiente
+        cargarCategoriasProducto(idCategoria)
+    }
+
+    private fun cargarCategoriasProducto(idCategoriaSeleccionada: Int) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")  // Cambiar la URL según la API real
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                conn.setRequestProperty("Content-Type", "application/json")
+
+                val responseCode = conn.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val reader = BufferedReader(InputStreamReader(conn.inputStream))
+                    val response = StringBuilder()
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        response.append(line)
+                    }
+                    reader.close()
+
+                    val jsonArray = JSONArray(response.toString())
+                    val categoriasList = mutableListOf<String>()
+                    val idCategoriasList = mutableListOf<Int>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        val idCategoria = jsonObject.getInt("idCategoria")
+                        val descripcion = jsonObject.getString("descripcion")
+
+                        categoriasList.add(descripcion)
+                        idCategoriasList.add(idCategoria)
+                    }
+
+                    launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter<String>(this@MainDatosProducto, android.R.layout.simple_spinner_item, categoriasList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        idCrudIdCategoriaProducto.adapter = adapter
+
+                        // Seleccionar la categoría correspondiente
+                        val posicion = idCategoriasList.indexOf(idCategoriaSeleccionada)
+                        if (posicion != -1) {
+                            idCrudIdCategoriaProducto.setSelection(posicion)
+                        }
+                    }
+                } else {
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(this@MainDatosProducto, "Error al obtener las categorías", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                launch(Dispatchers.Main) {
+                    Toast.makeText(this@MainDatosProducto, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                    Log.e("Error", "Error al conectar con la API: ${e.message}")
+                }
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onClick(v: View?) {
@@ -101,7 +163,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             R.id.btnActualizarProducto -> {
                 val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
                 val codigo = idCrudCodigoProducto.text.toString()
-                val idCategoria = idCrudIdCategoriaProducto.text.toString().toIntOrNull()
+                val idCategoria = idCrudIdCategoriaProducto.selectedItem.toString().toIntOrNull()
                 val descripcion = idCrudDescripcionProducto.text.toString()
                 val precioCompra = idCrudPrecioCompraProducto.text.toString().toDoubleOrNull()
                 val precioVenta = idCrudPrecioVentaProducto.text.toString().toDoubleOrNull()
@@ -119,7 +181,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 if (idProducto != null) {
                     eliminarProducto(idProducto)
                 } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Error al obtener el ID del producto", Toast.LENGTH_SHORT).show()
                 }
             }
             R.id.btnCrudVolverProducto -> {
@@ -127,6 +189,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
 
     private fun cargarImagenDesdeUrl(url: String) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -145,6 +208,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
 
 
     private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int) {

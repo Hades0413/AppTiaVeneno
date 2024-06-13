@@ -72,7 +72,7 @@
                 android:textSize="16sp"
                 android:paddingBottom="4dp"/>
 
-            <EditText
+            <Spinner
                 android:id="@+id/idCrudIdCategoriaProducto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
