@@ -1,7 +1,11 @@
 package com.example.apptiaveneno
 
+import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -11,15 +15,22 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
 
@@ -36,6 +47,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnCrudVolverProducto: Button
 
     private val PICK_IMAGE_REQUEST = 1
+    private val REQUEST_STORAGE_PERMISSION = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,29 +111,41 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         cargarCategoriasProducto(idCategoria)
     }
 
-    // Método llamado cuando se hace clic en la imagen
-    fun seleccionarImagen(view: View) {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST)
-    }
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btnActualizarProducto -> {
+                val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
+                val codigo = idCrudCodigoProducto.text.toString()
+                val idCategoria = idCrudIdCategoriaProducto.selectedItemPosition + 1
+                val descripcion = idCrudDescripcionProducto.text.toString()
+                val precioCompra = idCrudPrecioCompraProducto.text.toString().toDoubleOrNull()
+                val precioVenta = idCrudPrecioVentaProducto.text.toString().toDoubleOrNull()
+                val stock = idCrudStockProducto.text.toString().toIntOrNull()
+                val rutaImagen = idCrudProductoRutaImagen.tag?.toString() ?: ""  // Obtener la ruta de la imagen desde la tag del ImageView
 
-    // Método para manejar el resultado de la selección de imagen
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+                if (idProducto != null && codigo.isNotEmpty() && idCategoria != null && descripcion.isNotEmpty() && precioCompra != null && precioVenta != null && stock != null) {
+                    // Verificar permisos de almacenamiento antes de actualizar
+                    if (checkStoragePermission()) {
+                        actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock, rutaImagen)
+                    } else {
+                        requestStoragePermission()
+                    }
+                } else {
+                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                }
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val uri: Uri? = data.data
+            }
+            R.id.btnEliminarProducto -> {
+                val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
 
-            // Aquí puedes cargar la imagen desde la URI seleccionada
-            try {
-                val inputStream = contentResolver.openInputStream(uri!!)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                idCrudProductoRutaImagen.setImageBitmap(bitmap)
-                idCrudProductoRutaImagen.tag = uri.toString()  // Guardar la ruta de la imagen en la tag
-            } catch (e: Exception) {
-                e.printStackTrace()
+                if (idProducto != null) {
+                    eliminarProducto(idProducto)
+                } else {
+                    Toast.makeText(applicationContext, "Error al obtener el ID del producto", Toast.LENGTH_SHORT).show()
+                }
+            }
+            R.id.btnCrudVolverProducto -> {
+                volverAProductos()
             }
         }
     }
@@ -182,40 +206,61 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    // Método llamado cuando se hace clic en la imagen
+    fun seleccionarImagen(view: View) {
+        // Verificar permisos de almacenamiento antes de seleccionar la imagen
+        if (checkStoragePermission()) {
+            abrirSelectorImagen()
+        } else {
+            requestStoragePermission()
+        }
+    }
 
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.btnActualizarProducto -> {
-                val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
-                val codigo = idCrudCodigoProducto.text.toString()
-                val idCategoria = idCrudIdCategoriaProducto.selectedItemPosition + 1
-                val descripcion = idCrudDescripcionProducto.text.toString()
-                val precioCompra = idCrudPrecioCompraProducto.text.toString().toDoubleOrNull()
-                val precioVenta = idCrudPrecioVentaProducto.text.toString().toDoubleOrNull()
-                val stock = idCrudStockProducto.text.toString().toIntOrNull()
-                val rutaImagen = idCrudProductoRutaImagen.tag?.toString() ?: ""  // Obtener la ruta de la imagen desde la tag del ImageView
+    private fun abrirSelectorImagen() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST)
+    }
 
-                if (idProducto != null && codigo.isNotEmpty() && idCategoria != null && descripcion.isNotEmpty() && precioCompra != null && precioVenta != null && stock != null) {
-                    actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock, rutaImagen)
+    private fun generateUniqueFileName(): String {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        return "imagen_$timeStamp.jpg"
+    }
+
+    // Método para manejar el resultado de la selección de imagen
+    // Método para manejar el resultado de la selección de imagen
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val uri: Uri? = data.data
+
+            try {
+                val inputStream = contentResolver.openInputStream(uri!!)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                // Generar nombre de archivo único
+                val imageName = generateUniqueFileName()
+
+                // Guardar la imagen en el directorio específico
+                val savedFile = saveImageToDirectory(bitmap, imageName)
+
+                if (savedFile != null) {
+                    // Actualizar la tag del ImageView con la ruta del archivo guardado
+                    idCrudProductoRutaImagen.tag = savedFile.absolutePath
+
+                    // Mostrar la imagen en ImageView
+                    idCrudProductoRutaImagen.setImageBitmap(bitmap)
                 } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show()
                 }
-
-            }
-            R.id.btnEliminarProducto -> {
-                val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
-
-                if (idProducto != null) {
-                    eliminarProducto(idProducto)
-                } else {
-                    Toast.makeText(applicationContext, "Error al obtener el ID del producto", Toast.LENGTH_SHORT).show()
-                }
-            }
-            R.id.btnCrudVolverProducto -> {
-                volverAProductos()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
+
 
     private fun cargarImagenDesdeRuta(rutaImagen: String) {
         val resourceId = resources.getIdentifier(rutaImagen, "drawable", packageName)
@@ -235,6 +280,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
+                // Usar el nombre de imagen guardado en lugar de la ruta completa
                 val productoJson = JSONObject().apply {
                     put("idProducto", idProducto)
                     put("codigo", codigo)
@@ -246,7 +292,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                     put("precioCompra", precioCompra)
                     put("precioVenta", precioVenta)
                     put("stock", stock)
-                    put("rutaImagen", rutaImagen)
+                    put("rutaImagen", rutaImagen) // Aquí debería estar el nombre de archivo guardado
                 }
 
                 conn.outputStream.use { os ->
@@ -278,9 +324,6 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
-
-
-
 
     private fun eliminarProducto(idProducto: Int) {
         val alertDialog = AlertDialog.Builder(this).create()
@@ -333,4 +376,68 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, MainProducto::class.java)
         startActivity(intent)
     }
+
+    private fun checkStoragePermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido, proceder con la acción que lo requería
+                // Aquí podrías volver a intentar la acción que requería el permiso (actualización, selección de imagen, etc.)
+            } else {
+                // Permiso denegado, informar al usuario o desactivar la funcionalidad que requería el permiso
+                Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun saveImageToDirectory(bitmap: Bitmap, fileName: String): File? {
+        // Obtener el directorio donde se almacenará la imagen
+        val directory = File(getExternalFilesDir(null), "ImgTiaVeneno")
+
+        try {
+            // Crear el directorio si no existe
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    Log.e("saveImageToDirectory", "Error: No se pudo crear el directorio")
+                    return null
+                }
+            }
+
+            // Crear el archivo donde se guardará la imagen
+            val file = File(directory, fileName)
+
+            // Guardar la imagen en el archivo
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            fileOutputStream.close()
+
+            return file
+        } catch (e: IOException) {
+            Log.e("saveImageToDirectory", "Error al guardar la imagen: ${e.message}")
+            e.printStackTrace()
+            return null
+        }
+    }
+
+
 }
