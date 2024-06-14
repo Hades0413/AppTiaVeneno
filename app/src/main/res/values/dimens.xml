@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="rating_bar_margin_start_large">8dp</dimen>
+    <dimen name="rating_bar_margin_start_small">34dp</dimen>
+</resources>

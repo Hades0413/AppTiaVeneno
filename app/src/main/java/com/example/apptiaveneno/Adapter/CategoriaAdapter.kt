@@ -38,4 +38,5 @@ class CategoriaAdapter(private val context: Context, private val dataSource: JSO
 
         return view
     }
+
 }
