@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/idDataProductoIdCategoria"
+                    android:background="@color/red_700"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Sandwichería"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+                <RatingBar
+                    android:id="@+id/ratingBarComidas"
+                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="1dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressTint="@color/yellow_700"
+                    android:rating="5"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:stepSize="1" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/idDataProductoDescripcion"
+                android:textStyle="bold"
+                android:text="Ceviche de Pescado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:paddingBottom="8dp">
+                <TextView
+                    android:id="@+id/idDataProductoPrecioVenta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="25.00"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/black" />
+
+
+                <TextView
+                    android:id="@+id/idDataProductoPrecioVentaDescuento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="27.50"
+                    android:layout_marginStart="10dp"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/red_700" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/red_700"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:text="¡PIDE YA!" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/idDataProductoRutaImagen"
+            android:scaleType="centerCrop"
+            android:layout_width="195dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/criollo" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

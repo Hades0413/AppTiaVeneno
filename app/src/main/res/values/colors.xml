@@ -14,5 +14,22 @@
 
     <color name="light_gray">#F5F5F5</color>
 
+    <!-- New colors -->
+    <color name="blue_200">#FF90CAF9</color>
+    <color name="blue_500">#FF2196F3</color>
+    <color name="blue_700">#FF1976D2</color>
+    <color name="green_200">#FFA5D6A7</color>
+    <color name="green_500">#FF4CAF50</color>
+    <color name="green_700">#FF388E3C</color>
+    <color name="red_200">#FFEF9A9A</color>
+    <color name="red_500">#FFF44336</color>
+    <color name="red_700">#FFD32F2F</color>
+    <color name="purple_200">#E1BEE7</color>
+    <color name="purple_500">#9C27B0</color>
+    <color name="purple_700">#7B1FA2</color>
+    <color name="yellow_200">#FFF59D</color>
+    <color name="yellow_500">#FFEB3B</color>
+    <color name="yellow_700">#FBC02D</color>
 
+    <color name="menu_icon">#701313</color>
 </resources>
