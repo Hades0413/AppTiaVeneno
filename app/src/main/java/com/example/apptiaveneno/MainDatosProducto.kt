@@ -222,14 +222,50 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST)
     }
+    /*
+    private fun generateUniqueFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow("_display_name"))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+        return result ?: "imagen_desconocida.jpg"
+    }*/
 
-    private fun generateUniqueFileName(): String {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return "imagen_$timeStamp.jpg"
+    private fun generateUniqueFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow("_display_name"))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+
+        // Eliminar la extensión del nombre del archivo
+        result = result?.substringBeforeLast(".")
+
+        return result ?: "imagen_desconocida"
     }
 
-    // Método para manejar el resultado de la selección de imagen
-    // Método para manejar el resultado de la selección de imagen
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -237,18 +273,19 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             val uri: Uri? = data.data
 
             try {
-                val inputStream = contentResolver.openInputStream(uri!!)
+                // Generar nombre de archivo único usando el nombre original y extensión
+                val imageName = generateUniqueFileName(uri!!)
+
+                // Obtener InputStream de la URI seleccionada
+                val inputStream = contentResolver.openInputStream(uri)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
-                // Generar nombre de archivo único
-                val imageName = generateUniqueFileName()
-
-                // Guardar la imagen en el directorio específico
+                // Guardar la imagen con el nombre original en el directorio específico
                 val savedFile = saveImageToDirectory(bitmap, imageName)
 
                 if (savedFile != null) {
-                    // Actualizar la tag del ImageView con la ruta del archivo guardado
-                    idCrudProductoRutaImagen.tag = savedFile.absolutePath
+                    // Actualizar la tag del ImageView con el nombre del archivo guardado
+                    idCrudProductoRutaImagen.tag = imageName
 
                     // Mostrar la imagen en ImageView
                     idCrudProductoRutaImagen.setImageBitmap(bitmap)
@@ -257,9 +294,12 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+
 
 
     private fun cargarImagenDesdeRuta(rutaImagen: String) {
