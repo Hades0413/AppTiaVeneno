@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apptiaveneno.R
 import org.json.JSONArray
 import org.json.JSONObject
-
-class CategoriaMenuPrincipalAdapter(private val context: Context, private val dataSource: JSONArray) :
+class CategoriaMenuPrincipalAdapter(private val context: Context, private val dataSource: JSONArray,  private val onCategoriaClickListener: (JSONObject) -> Unit) :
     RecyclerView.Adapter<CategoriaMenuPrincipalAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.rv_item_categoria_menu_principal, parent, false)
+        val view = LayoutInflater.from(context)
+            .inflate(R.layout.rv_item_categoria_menu_principal, parent, false)
         return ViewHolder(view)
     }
 
@@ -33,7 +33,7 @@ class CategoriaMenuPrincipalAdapter(private val context: Context, private val da
         private val cat_background: LinearLayout = itemView.findViewById(R.id.cat_background)
 
         fun bind(categoria: JSONObject, position: Int) {
-            tvDescripcion.text = categoria.getString("descripcion")
+            tvDescripcion.text = categoria.optString("descripcion", "No Description") // Default value if "descripcion" is missing
 
             // Selección dinámica del fondo basado en la posición
             val backgroundResource = when (position % 5) {
@@ -45,6 +45,10 @@ class CategoriaMenuPrincipalAdapter(private val context: Context, private val da
                 else -> R.drawable.cat_background // Por si acaso
             }
             cat_background.setBackgroundResource(backgroundResource)
+
+            itemView.setOnClickListener {
+                onCategoriaClickListener(categoria)
+            }
         }
     }
 }

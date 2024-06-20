@@ -2,6 +2,9 @@ package com.example.apptiaveneno
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apptiaveneno.Adapter.CategoriaMenuPrincipalAdapter
 import com.example.apptiaveneno.Adapter.ProductoMenuPrincipalAdapter
+import com.example.apptiaveneno.Adapter.ProductoPorCategoriaAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,12 +24,15 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
-
 class MenuPrincipal : AppCompatActivity() {
+    private lateinit var categoriaAdapter: CategoriaMenuPrincipalAdapter
+    private lateinit var productoAdapter: ProductoPorCategoriaAdapter
     private lateinit var comidasBtn: LinearLayout
     private lateinit var categoriasBtn: LinearLayout
     private lateinit var listaCategoriaMenuPrincipal: RecyclerView
     private lateinit var listaProductoMenuPrincipal: RecyclerView
+    private lateinit var idDescripcionProducto: EditText
+    private lateinit var allProducts: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +48,23 @@ class MenuPrincipal : AppCompatActivity() {
         categoriasBtn = findViewById(R.id.categoriasBtn)
         listaCategoriaMenuPrincipal = findViewById(R.id.listaCategoriaMenuPrincipal)
         listaProductoMenuPrincipal = findViewById(R.id.listaProductoMenuPrincipal)
+        idDescripcionProducto = findViewById(R.id.idDescripcionProducto)
 
         val layoutManager = GridLayoutManager(this, 1, RecyclerView.HORIZONTAL, false)
         listaCategoriaMenuPrincipal.layoutManager = layoutManager
 
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
+
+        idDescripcionProducto.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                consultarProducto()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun vercategoria() {
@@ -86,8 +104,16 @@ class MenuPrincipal : AppCompatActivity() {
                     val jsonArray = JSONArray(response.toString())
 
                     runOnUiThread {
-                        val adapter = CategoriaMenuPrincipalAdapter(this@MenuPrincipal, jsonArray)
-                        listaCategoriaMenuPrincipal.adapter = adapter
+                        categoriaAdapter = CategoriaMenuPrincipalAdapter(this@MenuPrincipal, jsonArray) { categoria ->
+                            if (categoria.has("idCategoria")) {
+                                val intent = Intent(this@MenuPrincipal, MainCategoriaPorProducto::class.java).apply {
+                                    putExtra("categoriaId", categoria.getInt("idCategoria"))
+                                    putExtra("categoriaDescripcion", categoria.getString("descripcion"))
+                                }
+                                startActivity(intent)
+                            }
+                        }
+                        listaCategoriaMenuPrincipal.adapter = categoriaAdapter
                     }
                 }
             } catch (e: Exception) {
@@ -114,10 +140,10 @@ class MenuPrincipal : AppCompatActivity() {
                     }
                     reader.close()
 
-                    val jsonArray = JSONArray(response.toString())
+                    allProducts = JSONArray(response.toString())
 
                     runOnUiThread {
-                        val adapter = ProductoMenuPrincipalAdapter(this@MenuPrincipal, jsonArray)
+                        val adapter = ProductoMenuPrincipalAdapter(this@MenuPrincipal, allProducts)
                         listaProductoMenuPrincipal.layoutManager = LinearLayoutManager(this@MenuPrincipal)
                         listaProductoMenuPrincipal.adapter = adapter
                     }
@@ -126,5 +152,20 @@ class MenuPrincipal : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun consultarProducto() {
+        val searchQuery = idDescripcionProducto.text.toString().trim()
+        val filteredList = JSONArray()
+
+        for (i in 0 until allProducts.length()) {
+            val jsonObject = allProducts.getJSONObject(i)
+            if (jsonObject.getString("descripcion").contains(searchQuery, true)) {
+                filteredList.put(jsonObject)
+            }
+        }
+
+        productoAdapter = ProductoPorCategoriaAdapter(this, filteredList)
+        listaProductoMenuPrincipal.adapter = productoAdapter
     }
 }
