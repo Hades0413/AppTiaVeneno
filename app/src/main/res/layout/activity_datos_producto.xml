@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_gray"
-    tools:context=".MainDatosProducto"
-    >
+    tools:context=".MainDatosProducto">
+
+    <RelativeLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
     <androidx.cardview.widget.CardView
@@ -61,6 +64,7 @@
                 android:textSize="14sp"
                 android:paddingBottom="8dp"/>
 
+
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
@@ -71,7 +75,7 @@
                 android:textSize="16sp"
                 android:paddingBottom="4dp"/>
 
-            <EditText
+            <Spinner
                 android:id="@+id/idCrudIdCategoriaProducto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,6 +85,7 @@
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
+
 
             <TextView
                 android:id="@+id/textView21"
@@ -220,6 +225,9 @@
             android:layout_height="300dp"
             android:src="@drawable/logo_tia_modified"
 
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="seleccionarImagen"
 
             android:contentDescription="TODO"
             >
@@ -233,3 +241,4 @@
 
 
 </RelativeLayout>
+    </ScrollView>

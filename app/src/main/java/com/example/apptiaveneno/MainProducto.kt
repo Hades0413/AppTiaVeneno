@@ -55,14 +55,18 @@ class MainProducto : AppCompatActivity() {
                 val productoSeleccionado = parent.getItemAtPosition(position) as JSONObject
                 val idProducto = productoSeleccionado.getInt("idProducto")
                 val codigo = productoSeleccionado.getString("codigo")
-                val idCategoria = if (productoSeleccionado.has("idCategoria")) productoSeleccionado.getInt("idCategoria") else -1
+                val idCategoria = if (productoSeleccionado.has("oCategoria")) {
+                    val oCategoria = productoSeleccionado.getJSONObject("oCategoria")
+                    oCategoria.getInt("idCategoria")
+                } else {
+                    -1 // Establecer un valor por defecto si no hay categoría definida
+                }
                 val descripcion = productoSeleccionado.getString("descripcion")
                 val precioCompra = productoSeleccionado.getDouble("precioCompra")
                 val precioVenta = productoSeleccionado.getDouble("precioVenta")
                 val stock = productoSeleccionado.getInt("stock")
                 val rutaImagen = productoSeleccionado.getString("rutaImagen")
 
-                // Crear un intent para enviar los datos del producto a otra actividad
                 val intent = Intent(this@MainProducto, MainDatosProducto::class.java).apply {
                     putExtra("idProducto", idProducto)
                     putExtra("codigo", codigo)
@@ -74,12 +78,15 @@ class MainProducto : AppCompatActivity() {
                     putExtra("rutaImagen", rutaImagen)
                 }
                 startActivity(intent)
+
             } catch (e: JSONException) {
                 e.printStackTrace()
                 // Manejar la excepción, por ejemplo, mostrar un mensaje de error
                 Toast.makeText(this@MainProducto, "Error al obtener los datos del producto", Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
 
 

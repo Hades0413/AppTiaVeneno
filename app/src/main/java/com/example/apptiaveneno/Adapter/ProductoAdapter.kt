@@ -1,7 +1,6 @@
 package com.example.apptiaveneno.Adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,23 +47,24 @@ class ProductoAdapter(private val context: Context, private val dataSource: JSON
         idDataProductoPrecioVenta.text = producto.getDouble("precioVenta").toString()
         idDataProductoStock.text = producto.getInt("stock").toString()
 
-        val oCategoria = producto.getJSONObject("oCategoria")
-        val descripcionCategoria = oCategoria.getString("descripcion")
-
-        // Asigna solo la descripción de la categoría
-        idDataProductoIdCategoria.text = descripcionCategoria
+        val oCategoria = producto.optJSONObject("oCategoria")
+        if (oCategoria != null) {
+            val descripcionCategoria = oCategoria.getString("descripcion")
+            idDataProductoIdCategoria.text = descripcionCategoria
+        } else {
+            idDataProductoIdCategoria.text = ""
+        }
 
         val rutaImagen = producto.optString("rutaImagen", "")
-
         if (rutaImagen.isNotEmpty()) {
             val resourceId = context.resources.getIdentifier(rutaImagen, "drawable", context.packageName)
             if (resourceId != 0) {
                 idDataProductoRutaImagen.setImageResource(resourceId)
             } else {
-                idDataProductoRutaImagen.setImageResource(R.drawable.discord)
+                idDataProductoRutaImagen.setImageResource(R.drawable.discord) // Imagen predeterminada si no se encuentra la imagen
             }
         } else {
-            idDataProductoRutaImagen.setImageResource(R.drawable.discord)
+            idDataProductoRutaImagen.setImageResource(R.drawable.discord) // Imagen predeterminada si no hay ruta de imagen
         }
 
         return view

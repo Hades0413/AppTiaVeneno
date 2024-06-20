@@ -1,32 +1,42 @@
 package com.example.apptiaveneno
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var idCrudIdProducto: TextView
     private lateinit var idCrudCodigoProducto: TextView
-    private lateinit var idCrudIdCategoriaProducto: EditText
+    private lateinit var idCrudIdCategoriaProducto: Spinner
     private lateinit var idCrudDescripcionProducto: EditText
     private lateinit var idCrudPrecioCompraProducto: EditText
     private lateinit var idCrudPrecioVentaProducto: EditText
@@ -35,6 +45,9 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnActualizarProducto: Button
     private lateinit var btnEliminarProducto: Button
     private lateinit var btnCrudVolverProducto: Button
+
+    private val PICK_IMAGE_REQUEST = 1
+    private val REQUEST_STORAGE_PERMISSION = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,8 +71,11 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         btnEliminarProducto = findViewById(R.id.btnEliminarProducto)
         btnCrudVolverProducto = findViewById(R.id.btnCrudVolverProducto)
 
+        btnActualizarProducto.setOnClickListener(this)
+        btnEliminarProducto.setOnClickListener(this)
+        btnCrudVolverProducto.setOnClickListener(this)
 
-
+        // Obtener datos del Intent
         val idProducto = intent.getIntExtra("idProducto", -1)
         val codigo = intent.getStringExtra("codigo")
         val idCategoria = intent.getIntExtra("idCategoria", -1)
@@ -68,21 +84,31 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         val precioVenta = intent.getDoubleExtra("precioVenta", 0.0)
         val stock = intent.getIntExtra("stock", 0)
         val rutaImagen = intent.getStringExtra("rutaImagen")
-        rutaImagen?.let {
-            cargarImagenDesdeUrl(it)
+
+        // Verificar que los datos se recibieron correctamente
+        if (idProducto == -1 || codigo.isNullOrEmpty() || idCategoria == -1 || descripcion.isNullOrEmpty()) {
+            Toast.makeText(this, "Error al recibir los datos del producto", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
-        idCrudIdProducto.setText(idProducto.toString())
-        idCrudCodigoProducto.setText(codigo)
-        idCrudIdCategoriaProducto.setText(idCategoria.toString())
+        // Log para verificar los datos recibidos
+        Log.d("DatosProducto", "idProducto: $idProducto, codigo: $codigo, idCategoria: $idCategoria, descripcion: $descripcion, precioCompra: $precioCompra, precioVenta: $precioVenta, stock: $stock, rutaImagen: $rutaImagen")
+
+        // Cargar los datos en los componentes de la interfaz
+        idCrudIdProducto.text = idProducto.toString()
+        idCrudCodigoProducto.text = codigo
         idCrudDescripcionProducto.setText(descripcion)
         idCrudPrecioCompraProducto.setText(precioCompra.toString())
         idCrudPrecioVentaProducto.setText(precioVenta.toString())
         idCrudStockProducto.setText(stock.toString())
 
-        btnActualizarProducto.setOnClickListener(this)
-        btnEliminarProducto.setOnClickListener(this)
-        btnCrudVolverProducto.setOnClickListener(this)
+        // Cargar la imagen si existe una URL válida
+        rutaImagen?.let {
+            cargarImagenDesdeRuta(rutaImagen)
+        }
+
+        // Cargar las categorías y seleccionar la categoría correspondiente
+        cargarCategoriasProducto(idCategoria)
     }
 
     override fun onClick(v: View?) {
@@ -90,17 +116,24 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
             R.id.btnActualizarProducto -> {
                 val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
                 val codigo = idCrudCodigoProducto.text.toString()
-                val idCategoria = idCrudIdCategoriaProducto.text.toString().toIntOrNull()
+                val idCategoria = idCrudIdCategoriaProducto.selectedItemPosition + 1
                 val descripcion = idCrudDescripcionProducto.text.toString()
                 val precioCompra = idCrudPrecioCompraProducto.text.toString().toDoubleOrNull()
                 val precioVenta = idCrudPrecioVentaProducto.text.toString().toDoubleOrNull()
                 val stock = idCrudStockProducto.text.toString().toIntOrNull()
+                val rutaImagen = idCrudProductoRutaImagen.tag?.toString() ?: ""  // Obtener la ruta de la imagen desde la tag del ImageView
 
                 if (idProducto != null && codigo.isNotEmpty() && idCategoria != null && descripcion.isNotEmpty() && precioCompra != null && precioVenta != null && stock != null) {
-                    actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock)
+                    // Verificar permisos de almacenamiento antes de actualizar
+                    if (checkStoragePermission()) {
+                        actualizarProducto(idProducto, codigo, idCategoria, descripcion, precioCompra, precioVenta, stock, rutaImagen)
+                    } else {
+                        requestStoragePermission()
+                    }
                 } else {
                     Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
                 }
+
             }
             R.id.btnEliminarProducto -> {
                 val idProducto = idCrudIdProducto.text.toString().toIntOrNull()
@@ -108,7 +141,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 if (idProducto != null) {
                     eliminarProducto(idProducto)
                 } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Error al obtener el ID del producto", Toast.LENGTH_SHORT).show()
                 }
             }
             R.id.btnCrudVolverProducto -> {
@@ -117,27 +150,169 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun cargarImagenDesdeUrl(url: String) {
+    private fun cargarCategoriasProducto(idCategoriaSeleccionada: Int) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL(url)
-                val connection = url.openConnection() as HttpURLConnection
-                connection.doInput = true
-                connection.connect()
-                val inputStream = connection.inputStream
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                launch(Dispatchers.Main) {
-                    idCrudProductoRutaImagen.setImageBitmap(bitmap)
+                val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                conn.setRequestProperty("Content-Type", "application/json")
+
+                val responseCode = conn.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val reader = BufferedReader(InputStreamReader(conn.inputStream))
+                    val response = StringBuilder()
+                    var line: String?
+                    while (reader.readLine().also { line = it } != null) {
+                        response.append(line)
+                    }
+                    reader.close()
+
+                    val jsonArray = JSONArray(response.toString())
+                    val categoriasList = mutableListOf<String>()
+                    val idCategoriasList = mutableListOf<Int>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        val idCategoria = jsonObject.getInt("idCategoria")
+                        val descripcion = jsonObject.getString("descripcion")
+
+                        categoriasList.add(descripcion)
+                        idCategoriasList.add(idCategoria)
+                    }
+
+                    launch(Dispatchers.Main) {
+                        val adapter = ArrayAdapter<String>(this@MainDatosProducto, android.R.layout.simple_spinner_item, categoriasList)
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        idCrudIdCategoriaProducto.adapter = adapter
+
+                        val posicion = idCategoriasList.indexOf(idCategoriaSeleccionada)
+                        if (posicion != -1) {
+                            idCrudIdCategoriaProducto.setSelection(posicion)
+                        }
+                    }
+                } else {
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(this@MainDatosProducto, "Error al obtener las categorías", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } catch (e: Exception) {
-                Log.e("Error", "Error al cargar la imagen desde la URL: ${e.message}")
+                launch(Dispatchers.Main) {
+                    Toast.makeText(this@MainDatosProducto, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                    Log.e("Error", "Error al conectar con la API: ${e.message}")
+                }
+                e.printStackTrace()
+            }
+        }
+    }
+
+    // Método llamado cuando se hace clic en la imagen
+    fun seleccionarImagen(view: View) {
+        // Verificar permisos de almacenamiento antes de seleccionar la imagen
+        if (checkStoragePermission()) {
+            abrirSelectorImagen()
+        } else {
+            requestStoragePermission()
+        }
+    }
+
+    private fun abrirSelectorImagen() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST)
+    }
+    /*
+    private fun generateUniqueFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow("_display_name"))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+        return result ?: "imagen_desconocida.jpg"
+    }*/
+
+    private fun generateUniqueFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow("_display_name"))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != null && cut != -1) {
+                result = result?.substring(cut + 1)
+            }
+        }
+
+        // Eliminar la extensión del nombre del archivo
+        result = result?.substringBeforeLast(".")
+
+        return result ?: "imagen_desconocida"
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val uri: Uri? = data.data
+
+            try {
+                // Generar nombre de archivo único usando el nombre original y extensión
+                val imageName = generateUniqueFileName(uri!!)
+
+                // Obtener InputStream de la URI seleccionada
+                val inputStream = contentResolver.openInputStream(uri)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                // Guardar la imagen con el nombre original en el directorio específico
+                val savedFile = saveImageToDirectory(bitmap, imageName)
+
+                if (savedFile != null) {
+                    // Actualizar la tag del ImageView con el nombre del archivo guardado
+                    idCrudProductoRutaImagen.tag = imageName
+
+                    // Mostrar la imagen en ImageView
+                    idCrudProductoRutaImagen.setImageBitmap(bitmap)
+                } else {
+                    Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
 
-    private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+
+
+    private fun cargarImagenDesdeRuta(rutaImagen: String) {
+        val resourceId = resources.getIdentifier(rutaImagen, "drawable", packageName)
+        if (resourceId != 0) {
+            idCrudProductoRutaImagen.setImageResource(resourceId)
+        } else {
+            idCrudProductoRutaImagen.setImageResource(R.drawable.discord) // Imagen predeterminada si no se encuentra la imagen
+        }
+    }
+
+    private fun actualizarProducto(idProducto: Int, codigo: String, idCategoria: Int, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int, rutaImagen: String) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val url = URL("https://tiaveneno.somee.com/api/Inventario/productos/$idProducto")
                 val conn = url.openConnection() as HttpURLConnection
@@ -145,33 +320,43 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
-                val jsonObject = JSONObject().apply {
+                // Usar el nombre de imagen guardado en lugar de la ruta completa
+                val productoJson = JSONObject().apply {
+                    put("idProducto", idProducto)
                     put("codigo", codigo)
-                    put("idCategoria", idCategoria)
+                    put("oCategoria", JSONObject().apply {
+                        put("idCategoria", idCategoria)
+                        put("descripcion", descripcion)
+                    })
                     put("descripcion", descripcion)
                     put("precioCompra", precioCompra)
                     put("precioVenta", precioVenta)
                     put("stock", stock)
+                    put("rutaImagen", rutaImagen) // Aquí debería estar el nombre de archivo guardado
                 }
 
                 conn.outputStream.use { os ->
-                    val input = jsonObject.toString().toByteArray(Charsets.UTF_8)
+                    val input = productoJson.toString().toByteArray(Charsets.UTF_8)
                     os.write(input, 0, input.size)
                 }
 
                 val responseCode = conn.responseCode
+                val responseMessage = conn.responseMessage
+
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    launch(Dispatchers.Main) {
+                    withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Producto actualizado correctamente", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    launch(Dispatchers.Main) {
-                        Log.e("Error de actualización", "No se pudo actualizar el producto. Código de respuesta: $responseCode")
-                        Toast.makeText(applicationContext, "No se pudo actualizar el producto", Toast.LENGTH_SHORT).show()
+                    val errorStream = conn.errorStream
+                    val errorMessage = errorStream?.bufferedReader()?.use { it.readText() } ?: "Sin mensaje de error"
+                    Log.e("Error de actualización", "No se pudo actualizar el producto. Código de respuesta: $responseCode. Mensaje de error: $errorMessage")
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(applicationContext, "No se pudo actualizar el producto: $responseMessage", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
-                launch(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
                     Log.e("Error de conexión", "Error al conectar con la API: ${e.message}")
                     Toast.makeText(applicationContext, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
                 }
@@ -231,5 +416,68 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, MainProducto::class.java)
         startActivity(intent)
     }
-}
 
+    private fun checkStoragePermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            REQUEST_STORAGE_PERMISSION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido, proceder con la acción que lo requería
+                // Aquí podrías volver a intentar la acción que requería el permiso (actualización, selección de imagen, etc.)
+            } else {
+                // Permiso denegado, informar al usuario o desactivar la funcionalidad que requería el permiso
+                Toast.makeText(this, "Permiso de almacenamiento denegado", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun saveImageToDirectory(bitmap: Bitmap, fileName: String): File? {
+        // Obtener el directorio donde se almacenará la imagen
+        val directory = File(getExternalFilesDir(null), "ImgTiaVeneno")
+
+        try {
+            // Crear el directorio si no existe
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    Log.e("saveImageToDirectory", "Error: No se pudo crear el directorio")
+                    return null
+                }
+            }
+
+            // Crear el archivo donde se guardará la imagen
+            val file = File(directory, fileName)
+
+            // Guardar la imagen en el archivo
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+            fileOutputStream.close()
+
+            return file
+        } catch (e: IOException) {
+            Log.e("saveImageToDirectory", "Error al guardar la imagen: ${e.message}")
+            e.printStackTrace()
+            return null
+        }
+    }
+
+
+}
