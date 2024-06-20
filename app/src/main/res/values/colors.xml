@@ -32,4 +32,6 @@
     <color name="yellow_700">#FBC02D</color>
 
     <color name="menu_icon">#701313</color>
+    <color name="transparente">#00FFFFFF</color>
+
 </resources>

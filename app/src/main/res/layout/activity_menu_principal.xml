@@ -66,7 +66,7 @@
                     app:srcCompat="@drawable/profile" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName"
+                    android:id="@+id/idDescripcionProducto"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="32dp"
@@ -95,7 +95,7 @@
                     android:background="@drawable/orange_light_banner"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/editTextTextPersonName">
+                    app:layout_constraintTop_toBottomOf="@id/idDescripcionProducto">
 
                     <ImageView
                         android:id="@+id/imageView4"
@@ -162,12 +162,10 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="84dp"
+                    android:layout_height="28dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
                     android:text="Categorías"
