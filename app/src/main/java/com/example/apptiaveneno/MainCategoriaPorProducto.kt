@@ -30,16 +30,13 @@ class MainCategoriaPorProducto : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_categoria_por_producto)
 
-
         val backButton = findViewById<ImageButton>(R.id.regresarMenuPrincipal)
         backButton.setOnClickListener {
-            // Navegar de vuelta al menú principal
             val intent = Intent(this, MenuPrincipal::class.java)
             startActivity(intent)
             finish() // Opcional: cerrar la actividad actual si no se espera regresar
         }
 
-        // Obtener la categoría seleccionada y su descripción desde el intent
         categoriaId = intent.getIntExtra("categoriaId", 0)
         categoriaDescripcion = intent.getStringExtra("categoriaDescripcion") ?: ""
 
@@ -51,7 +48,6 @@ class MainCategoriaPorProducto : AppCompatActivity() {
         listaProductoPorCategoria = findViewById(R.id.listaProductoSegunCategoria)
         listaProductoPorCategoria.layoutManager = LinearLayoutManager(this)
 
-        // Actualizar el texto del TextView CategoriaElegida con la descripción de la categoría seleccionada
         val categoriaElegidaTextView = findViewById<TextView>(R.id.CategoriaElegida)
         categoriaElegidaTextView.text = categoriaDescripcion
     }

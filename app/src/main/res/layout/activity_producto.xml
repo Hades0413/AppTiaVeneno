@@ -59,6 +59,7 @@
         android:layout_height="match_parent"
         android:id="@+id/listarProducto"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="80dp"
         android:scrollbars="vertical"
         android:layout_below="@id/btn_container"
         android:divider="@color/orange_200"
@@ -69,7 +70,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="15dp"
         android:elevation="4dp">
         <Button
             android:id="@+id/btnIrCrearNuevaProducto"
@@ -85,5 +87,11 @@
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="11dp"/>
     </FrameLayout>
+    <include
+        android:id="@+id/bottom_app_bar"
+        layout="@layout/bottom_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
