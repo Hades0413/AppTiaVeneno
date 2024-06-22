@@ -37,7 +37,7 @@ class Login : AppCompatActivity() {
             val clave = edtClave.text.toString()
 
             if (correo.isEmpty() && clave.isEmpty()) {
-                showSweetAlertDialog("Debes ingresar usuario y contraseña.")
+                showSweetAlertDialog("Campos incompletos debes ingresar usuario y contraseña.")
             } else if (correo.isEmpty()) {
                 showSweetAlertDialog("Debes ingresar un usuario.")
             } else if (clave.isEmpty()) {
@@ -57,7 +57,7 @@ class Login : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             if (correo.isEmpty() && clave.isEmpty()) {
                 runOnUiThread {
-                    showSweetAlertDialog("Debes de ingresar usuario y contraseña.")
+                    showSweetAlertDialog("Campos incompletos debes ingresar usuario y contraseña.")
                 }
             } else if (correo.isEmpty()) {
                 runOnUiThread {

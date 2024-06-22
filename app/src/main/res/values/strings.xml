@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">AppTiaVeneno</string>
+    <string name="labelTipoPago">Seleccione Tipo de pago</string>
+
+    <string-array name="pagos">
+        <item>VISA</item>
+        <item>MASTERCARD</item>
+        <item>YAPE</item>
+    </string-array>
 
 </resources>
