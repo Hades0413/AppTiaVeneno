@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apptiaveneno.Adapter.CategoriaMenuPrincipalAdapter
+import com.example.apptiaveneno.Adapter.CategoriaPorProductoMenuPrincipalAdapter
 import com.example.apptiaveneno.Adapter.ProductoMenuPrincipalAdapter
 import com.example.apptiaveneno.Adapter.ProductoPorCategoriaAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +27,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 class MenuPrincipal : AppCompatActivity() {
     private lateinit var categoriaAdapter: CategoriaMenuPrincipalAdapter
-    private lateinit var productoAdapter: ProductoPorCategoriaAdapter
+    private lateinit var productoAdapter: ProductoMenuPrincipalAdapter
     private lateinit var comidasBtn: LinearLayout
     private lateinit var categoriasBtn: LinearLayout
     private lateinit var ventasBtn: LinearLayout
@@ -111,11 +112,20 @@ class MenuPrincipal : AppCompatActivity() {
                     val jsonArray = JSONArray(response.toString())
 
                     runOnUiThread {
-                        categoriaAdapter = CategoriaMenuPrincipalAdapter(this@MenuPrincipal, jsonArray) { categoria ->
+                        categoriaAdapter = CategoriaMenuPrincipalAdapter(
+                            this@MenuPrincipal,
+                            jsonArray
+                        ) { categoria ->
                             if (categoria.has("idCategoria")) {
-                                val intent = Intent(this@MenuPrincipal, MainCategoriaPorProducto::class.java).apply {
+                                val intent = Intent(
+                                    this@MenuPrincipal,
+                                    MainCategoriaPorProducto::class.java
+                                ).apply {
                                     putExtra("categoriaId", categoria.getInt("idCategoria"))
-                                    putExtra("categoriaDescripcion", categoria.getString("descripcion"))
+                                    putExtra(
+                                        "categoriaDescripcion",
+                                        categoria.getString("descripcion")
+                                    )
                                 }
                                 startActivity(intent)
                             }
@@ -150,9 +160,10 @@ class MenuPrincipal : AppCompatActivity() {
                     allProducts = JSONArray(response.toString())
 
                     runOnUiThread {
-                        val adapter = ProductoMenuPrincipalAdapter(this@MenuPrincipal, allProducts)
-                        listaProductoMenuPrincipal.layoutManager = LinearLayoutManager(this@MenuPrincipal)
-                        listaProductoMenuPrincipal.adapter = adapter
+                        productoAdapter = ProductoMenuPrincipalAdapter(this@MenuPrincipal, allProducts)
+                        listaProductoMenuPrincipal.layoutManager =
+                            LinearLayoutManager(this@MenuPrincipal)
+                        listaProductoMenuPrincipal.adapter = productoAdapter
                     }
                 }
             } catch (e: Exception) {
@@ -172,7 +183,11 @@ class MenuPrincipal : AppCompatActivity() {
             }
         }
 
-        productoAdapter = ProductoPorCategoriaAdapter(this, filteredList)
+        // Update the adapter with the new filtered list
+        productoAdapter = ProductoMenuPrincipalAdapter(this, filteredList)
         listaProductoMenuPrincipal.adapter = productoAdapter
+
+        // Notify the adapter of the data change
+        productoAdapter.notifyDataSetChanged()
     }
 }

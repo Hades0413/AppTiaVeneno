@@ -1,104 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".MainProducto">
+    tools:context=".MainProducto"
+    android:background="@color/white">
 
-    <RelativeLayout
-        android:id="@+id/main_content"
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="50dp"
+        android:id="@+id/idDescripcionProducto"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/search_background"
+        android:drawableStart="@drawable/search"
+        android:drawablePadding="10dp"
+        android:ems="10"
+        android:hint="Buscar por descripción de producto"
+        android:inputType="textPersonName"
+        android:paddingStart="20dp"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        />
 
-        <EditText
-            android:id="@+id/idDescripcionProducto"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/search_background"
-            android:drawableStart="@drawable/search"
-            android:drawablePadding="10dp"
-            android:ems="10"
-            android:hint="Buscar por descripción de producto"
-            android:inputType="textPersonName"
-            android:paddingStart="20dp"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+    <LinearLayout
+        android:id="@+id/btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/idDescripcionProducto"
+        android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/btn_container"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnRegresarProducto"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/idDescripcionProducto"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:backgroundTint="@color/orange_700"
+            android:text="Regresar"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="8dp"/>
 
-            <Button
-                android:id="@+id/btnRegresarProducto"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/orange_700"
-                android:text="Regresar"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/btnConsultarProducto"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/orange_700"
-                android:text="Consultar"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/listarProducto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/btn_container"
-            android:layout_marginTop="10dp"
-            android:divider="@color/orange_200"
-            android:dividerHeight="1dp"
-            android:scrollbars="vertical"
-            android:layout_marginBottom="80dp"/>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnConsultarProducto"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="90dp"
-            android:elevation="4dp">
+            android:backgroundTint="@color/orange_700"
+            android:text="Consultar"
+            android:textColor="@android:color/white"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/btnIrCrearNuevaProducto"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/orange_700"
-                android:textColor="@android:color/white" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listarProducto"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="80dp"
+        android:scrollbars="vertical"
+        android:layout_below="@id/btn_container"
+        android:divider="@color/orange_200"
+        android:dividerHeight="1dp"/>
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="35dp"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginStart="11dp"
-                android:src="@drawable/plus" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="15dp"
+        android:elevation="4dp">
+        <Button
+            android:id="@+id/btnIrCrearNuevaProducto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/orange_700"
+            android:textColor="@android:color/white"/>
 
-        </FrameLayout>
-
-    </RelativeLayout>
-
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:src="@drawable/plus"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="11dp"/>
+    </FrameLayout>
     <include
         android:id="@+id/bottom_app_bar"
-        layout="@layout/bottom_app_bar_layout" />
+        layout="@layout/bottom_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+</RelativeLayout>
