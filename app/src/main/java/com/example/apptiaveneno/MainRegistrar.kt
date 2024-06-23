@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.coroutines.Dispatchers
@@ -44,10 +45,23 @@ class MainRegistrar : AppCompatActivity(), View.OnClickListener {
                 val correo = edtCorreo.text.toString()
                 val clave = edtContrasenia.text.toString()
 
-                if (NombreCompleto.isNotEmpty() && correo.isNotEmpty() && clave.isNotEmpty()) {
+                val camposFaltantes = mutableListOf<String>()
+
+                if (NombreCompleto.isEmpty()) {
+                    camposFaltantes.add("Nombre Completo")
+                }
+                if (correo.isEmpty()) {
+                    camposFaltantes.add("Correo")
+                }
+                if (clave.isEmpty()) {
+                    camposFaltantes.add("Contraseña")
+                }
+
+                if (camposFaltantes.isEmpty()) {
                     registrarUsuarioAPI(NombreCompleto, correo, clave)
                 } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                    val mensaje = "Por favor completa todos los campos: (${camposFaltantes.joinToString(", ")})"
+                    mostrarAlertaCamposFaltantes(mensaje)
                 }
             }
             idYaTengoCuenta -> {
@@ -55,6 +69,16 @@ class MainRegistrar : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun mostrarAlertaCamposFaltantes(mensaje: String) {
+        AlertDialog.Builder(this)
+            .setTitle("Campos incompletos")
+            .setMessage(mensaje)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun registrarUsuarioAPI(NombreCompleto: String, correo: String, clave: String) {

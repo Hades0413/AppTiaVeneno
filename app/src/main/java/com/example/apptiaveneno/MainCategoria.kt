@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -25,6 +26,12 @@ class MainCategoria : AppCompatActivity() {
     private lateinit var btnIrCrearNuevaCategoria: Button
     private lateinit var btnConsultarCategoria: Button
     private lateinit var listView: ListView
+
+    //bottom_app_bar
+    private lateinit var homeBtn: LinearLayout
+    private lateinit var comidasBtn: LinearLayout
+    private lateinit var categoriasBtn: LinearLayout
+    private lateinit var ventasBtn: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +64,39 @@ class MainCategoria : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+
+        //bottom_app_bar
+        homeBtn = findViewById(R.id.homeBtn)
+        comidasBtn = findViewById(R.id.comidasBtn)
+        categoriasBtn = findViewById(R.id.categoriasBtn)
+        ventasBtn = findViewById(R.id.ventasBtn)
+        homeBtn.setOnClickListener { home() }
+        categoriasBtn.setOnClickListener { vercategoria() }
+        comidasBtn.setOnClickListener { verproducto() }
+        ventasBtn.setOnClickListener { verventa() }
     }
 
+
+    //bottom_app_bar
+    private fun home() {
+        val intent = Intent(this, MenuPrincipal::class.java)
+        startActivity(intent)
+    }
+    private fun verproducto() {
+        val intent = Intent(this, MainProducto::class.java)
+        startActivity(intent)
+    }
+    private fun verventa() {
+        val intent = Intent(this, MainVenta::class.java)
+        startActivity(intent)
+    }
+    private fun vercategoria() {
+        val intent = Intent(this, MainCategoria::class.java)
+        startActivity(intent)
+    }
+
+    //Actualizar automáticamente la vista
     override fun onResume() {
         super.onResume()
         fetchCategorias()
