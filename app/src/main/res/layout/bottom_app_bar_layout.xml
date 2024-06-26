@@ -147,13 +147,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/night" />
+                    android:src="@drawable/goat" />
 
                 <TextView
                     android:id="@+id/textView14"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Modo"
+                    android:text="Goats"
                     android:textAlignment="center"
                     android:textColor="@color/menu_icon"
                     android:textSize="12sp" />

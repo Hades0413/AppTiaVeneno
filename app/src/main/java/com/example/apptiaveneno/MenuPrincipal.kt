@@ -31,6 +31,7 @@ class MenuPrincipal : AppCompatActivity() {
     private lateinit var comidasBtn: LinearLayout
     private lateinit var categoriasBtn: LinearLayout
     private lateinit var ventasBtn: LinearLayout
+    private lateinit var modoBtn: LinearLayout
     private lateinit var listaCategoriaMenuPrincipal: RecyclerView
     private lateinit var listaProductoMenuPrincipal: RecyclerView
     private lateinit var idDescripcionProducto: EditText
@@ -49,6 +50,7 @@ class MenuPrincipal : AppCompatActivity() {
         comidasBtn = findViewById(R.id.comidasBtn)
         categoriasBtn = findViewById(R.id.categoriasBtn)
         ventasBtn = findViewById(R.id.ventasBtn)
+        modoBtn = findViewById(R.id.modoBtn)
         listaCategoriaMenuPrincipal = findViewById(R.id.listaCategoriaMenuPrincipal)
         listaProductoMenuPrincipal = findViewById(R.id.listaProductoMenuPrincipal)
         idDescripcionProducto = findViewById(R.id.idDescripcionProducto)
@@ -59,6 +61,7 @@ class MenuPrincipal : AppCompatActivity() {
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
         ventasBtn.setOnClickListener { verventa() }
+        modoBtn.setOnClickListener { vermodo() }
 
         idDescripcionProducto.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -82,6 +85,10 @@ class MenuPrincipal : AppCompatActivity() {
     }
     private fun vercategoria() {
         val intent = Intent(this, MainCategoria::class.java)
+        startActivity(intent)
+    }
+    private fun vermodo() {
+        val intent = Intent(this, MainColaborador::class.java)
         startActivity(intent)
     }
 

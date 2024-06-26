@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -52,6 +53,13 @@ dependencies {
     implementation(libs.rxandroid)
     implementation(libs.retrofit.adapter.rxjava3)
 
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation("com.google.firebase:firebase-database-ktx:20.0.2")
+
+    implementation ("com.google.firebase:firebase-firestore")
+
+    implementation("com.google.firebase:firebase-analytics")
 
 
     testImplementation(libs.junit)

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "161274006998",
+    "project_id": "apptiavenenofirebase",
+    "storage_bucket": "apptiavenenofirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:161274006998:android:6629d3da7f6df2846d6877",
+        "android_client_info": {
+          "package_name": "com.example.apptiaveneno"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKVauvwFDb3O538XIjV36ItzaF9XD1zRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

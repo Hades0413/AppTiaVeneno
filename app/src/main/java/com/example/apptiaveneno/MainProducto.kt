@@ -35,6 +35,7 @@ class MainProducto : AppCompatActivity() {
     private lateinit var comidasBtn: LinearLayout
     private lateinit var categoriasBtn: LinearLayout
     private lateinit var ventasBtn: LinearLayout
+    private lateinit var modoBtn: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,18 +93,22 @@ class MainProducto : AppCompatActivity() {
                 Toast.makeText(this@MainProducto, "Error al obtener los datos del producto", Toast.LENGTH_SHORT).show()
             }
         }
+
         //bottom_app_bar
         homeBtn = findViewById(R.id.homeBtn)
         comidasBtn = findViewById(R.id.comidasBtn)
         categoriasBtn = findViewById(R.id.categoriasBtn)
         ventasBtn = findViewById(R.id.ventasBtn)
+        modoBtn = findViewById(R.id.modoBtn)
         homeBtn.setOnClickListener { home() }
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
-
         ventasBtn.setOnClickListener { verventa() }
+        modoBtn.setOnClickListener { vermodo() }
+
         cargarProductos()
     }
+
     //bottom_app_bar
     private fun home() {
         val intent = Intent(this, MenuPrincipal::class.java)
@@ -119,6 +124,10 @@ class MainProducto : AppCompatActivity() {
     }
     private fun vercategoria() {
         val intent = Intent(this, MainCategoria::class.java)
+        startActivity(intent)
+    }
+    private fun vermodo() {
+        val intent = Intent(this, MainColaborador::class.java)
         startActivity(intent)
     }
 
