@@ -18,11 +18,11 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
+class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var idCrearCategoriaDescripcion:EditText
-    private lateinit var btnGrabarCategoria:Button
-    private lateinit var btnVolverCategoria:Button
+    private lateinit var idCrearCategoriaDescripcion: EditText
+    private lateinit var btnGrabarCategoria: Button
+    private lateinit var btnVolverCategoria: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,7 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
                 if (descripcion.isNotEmpty()) {
                     grabarCategoria(descripcion)
                 } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                    mostrarAlerta("Por favor completa todos los campos")
                 }
             }
             btnVolverCategoria -> {
@@ -59,7 +59,6 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
             }
         }
     }
-
 
     private fun grabarCategoria(descripcion: String) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -80,6 +79,8 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
                 }
 
                 val responseCode = conn.responseCode
+                val responseBody = conn.inputStream.bufferedReader().use { it.readText() }
+
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     // Registro exitoso
                     launch(Dispatchers.Main) {
@@ -88,9 +89,16 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
                         startActivity(intent)
                     }
                 } else if (responseCode == HttpURLConnection.HTTP_CONFLICT) {
-                    // La categoría ya existe
-                    launch(Dispatchers.Main) {
-                        mostrarAlertaCategoriaExistente()
+                    // Verificar el contenido de la respuesta para determinar si ya existe
+                    val jsonResponse = JSONObject(responseBody)
+                    if (jsonResponse.optBoolean("existe", false)) {
+                        launch(Dispatchers.Main) {
+                            mostrarAlertaCategoriaExistente()
+                        }
+                    } else {
+                        launch(Dispatchers.Main) {
+                            Toast.makeText(applicationContext, "Error en el servidor", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
                     // Otro estado de respuesta, por ejemplo, error del servidor
@@ -108,8 +116,6 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
         }
     }
 
-
-
     private fun mostrarAlertaCategoriaExistente() {
         AlertDialog.Builder(this@MainNuevaCategoria)
             .setTitle("Error")
@@ -118,5 +124,14 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener  {
             .show()
     }
 
-
+    private fun mostrarAlerta(mensaje: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Alerta")
+            .setMessage(mensaje)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

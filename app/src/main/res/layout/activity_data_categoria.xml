@@ -61,7 +61,7 @@
                     android:paddingBottom="8dp"/>
 
                 <TextView
-                    android:id="@+id/idDataCategoriaDescripcion"
+                    android:id="@+id/textview51"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Descripción"
@@ -71,7 +71,7 @@
                     android:paddingBottom="4dp"/>
 
                 <TextView
-                    android:id="@+id/tvDescripcion"
+                    android:id="@+id/idDataCategoriaDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"

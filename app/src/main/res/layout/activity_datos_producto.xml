@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/search_background"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="numberDecimal"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/search_background"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="numberDecimal"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/search_background"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>

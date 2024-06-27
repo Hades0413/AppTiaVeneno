@@ -30,11 +30,11 @@ class CategoriaAdapter(private val context: Context, private val dataSource: JSO
         val view: View = convertView ?: inflater.inflate(R.layout.activity_data_categoria, parent, false)
 
         val idDataCategoriaCodigo = view.findViewById<TextView>(R.id.idDataCategoriaCodigo)
-        val tvDescripcion = view.findViewById<TextView>(R.id.tvDescripcion)
+        val idDataCategoriaDescripcion = view.findViewById<TextView>(R.id.idDataCategoriaDescripcion)
 
         val categoria = getItem(position)
         idDataCategoriaCodigo.text = categoria.getString("idCategoria")
-        tvDescripcion.text = categoria.getString("descripcion")
+        idDataCategoriaDescripcion.text = categoria.getString("descripcion")
 
         return view
     }

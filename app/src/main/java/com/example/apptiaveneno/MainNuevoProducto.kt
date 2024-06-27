@@ -2,6 +2,7 @@ package com.example.apptiaveneno
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -26,8 +27,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
 
@@ -88,17 +87,52 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
                 val stock = idCrearProductoStock.text.toString()
                 val rutaImagen = idCrearProductoRutaImagen.tag?.toString() ?: ""
 
-                if (codigo.isNotEmpty() && descripcionCategoria.isNotEmpty() && descripcion.isNotEmpty() && precioCompra.isNotEmpty() && precioVenta.isNotEmpty() && stock.isNotEmpty()) {
-                    grabarProducto(codigo, idCategoria, descripcionCategoria, descripcion, precioCompra.toDouble(), precioVenta.toDouble(), stock.toInt(), rutaImagen)
-                } else {
-                    Toast.makeText(applicationContext, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                // Verificar todos los campos
+                val camposFaltantes = mutableListOf<String>()
+
+                if (codigo.isEmpty()) {
+                    camposFaltantes.add("Código")
                 }
+                if (descripcion.isEmpty()) {
+                    camposFaltantes.add("Descripción")
+                }
+                if (precioCompra.isEmpty()) {
+                    camposFaltantes.add("Precio de Compra")
+                }
+                if (precioVenta.isEmpty()) {
+                    camposFaltantes.add("Precio de Venta")
+                }
+                if (stock.isEmpty()) {
+                    camposFaltantes.add("Stock")
+                }
+                if (rutaImagen.isNullOrEmpty()) {
+                    camposFaltantes.add("Imagen")
+                }
+
+                // Mostrar mensaje de alerta si hay campos faltantes
+                if (camposFaltantes.isNotEmpty()) {
+                    val mensaje = "Por favor completa los siguientes campos:\n\n${camposFaltantes.joinToString("\n")}"
+                    mostrarAlerta(mensaje)
+                    return
+                }
+
+                // Si todos los campos están completos, proceder con la grabación del producto
+                grabarProducto(codigo, idCategoria, descripcionCategoria, descripcion, precioCompra.toDouble(), precioVenta.toDouble(), stock.toInt(), rutaImagen)
             }
             btnCrearProductoVolver -> {
                 val intent = Intent(this, MainProducto::class.java)
                 startActivity(intent)
             }
         }
+    }
+
+    private fun mostrarAlerta(mensaje: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Campos Incompletos")
+        builder.setMessage(mensaje)
+        builder.setPositiveButton("Aceptar", null)
+        val dialog = builder.create()
+        dialog.show()
     }
 
 
@@ -129,15 +163,15 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
                 val inputStream = contentResolver.openInputStream(uri!!)
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
-                // Generar nombre de archivo único
-                val imageName = generateUniqueFileName()
+                // Obtener el nombre de la imagen original sin la extensión
+                val originalFileName = getFileName(uri).substringBeforeLast('.')
 
                 // Guardar la imagen en el directorio específico
-                val savedFile = saveImageToDirectory(bitmap, imageName)
+                val savedFile = saveImageToDirectory(bitmap, originalFileName)
 
                 if (savedFile != null) {
-                    // Actualizar la tag del ImageView con la ruta del archivo guardado
-                    idCrearProductoRutaImagen.tag = savedFile.name // Aquí se guarda el nombre del archivo
+                    // Actualizar la tag del ImageView con el nombre del archivo guardado sin extensión
+                    idCrearProductoRutaImagen.tag = originalFileName
 
                     // Mostrar la imagen en ImageView
                     idCrearProductoRutaImagen.setImageBitmap(bitmap)
@@ -150,26 +184,13 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun generateUniqueFileName(): String {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return "imagen_$timeStamp.jpg"
-    }
-
     private fun saveImageToDirectory(bitmap: Bitmap, fileName: String): File? {
         // Obtener el directorio donde se almacenará la imagen
-        val directory = File(getExternalFilesDir(null), "ImgTiaVeneno")
+        val directory = getExternalFilesDir(null)
 
         try {
-            // Crear el directorio si no existe
-            if (!directory.exists()) {
-                if (!directory.mkdirs()) {
-                    Log.e("saveImageToDirectory", "Error: No se pudo crear el directorio")
-                    return null
-                }
-            }
-
             // Crear el archivo donde se guardará la imagen
-            val file = File(directory, fileName)
+            val file = File(directory, "$fileName.jpg") // Agregar la extensión .jpg
 
             // Guardar la imagen en el archivo
             val fileOutputStream = FileOutputStream(file)
@@ -184,7 +205,53 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun grabarProducto(codigo: String, idCategoria: Int, descripcionCategoria: String, descripcion: String, precioCompra: Double, precioVenta: Double, stock: Int, rutaImagen: String) {
+    private fun getFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result!!.substring(cut + 1)
+            }
+        }
+        return result!!
+    }
+
+    private fun grabarProducto(codigo: String, idCategoria: Int, descripcionCategoria: String, descripcion: String, precioCompra: Double?, precioVenta: Double?, stock: Int?, rutaImagen: String?) {
+        val mensajesError = StringBuilder()
+
+        if (codigo.isEmpty()) {
+            mensajesError.append("Falta completar el campo Código\n")
+        }
+        if (descripcion.isEmpty()) {
+            mensajesError.append("Falta completar el campo Descripción\n")
+        }
+        if (precioCompra == null) {
+            mensajesError.append("Falta completar el campo Precio de Compra\n")
+        }
+        if (precioVenta == null) {
+            mensajesError.append("Falta completar el campo Precio de Venta\n")
+        }
+        if (stock == null) {
+            mensajesError.append("Falta completar el campo Stock\n")
+        }
+        if (rutaImagen.isNullOrEmpty()) {
+            mensajesError.append("No has seleccionado una imagen\n")
+        }
+
+        if (mensajesError.isNotEmpty()) {
+            mostrarAlerta(mensajesError.toString())
+            return
+        }
+
+        // Aquí procedes con el código para enviar los datos a la API
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val url = URL("https://tiaveneno.somee.com/api/Inventario/productos")
@@ -198,7 +265,7 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
                     put("codigo", codigo)
                     put("oCategoria", JSONObject().apply {
                         put("idCategoria", idCategoria)
-                        put("descripcion", descripcionCategoria) // Asegúrate de que este valor sea la descripción correcta
+                        put("descripcion", descripcionCategoria)
                     })
                     put("descripcion", descripcion)
                     put("precioCompra", precioCompra)
@@ -218,105 +285,80 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
                 if (responseCode == HttpURLConnection.HTTP_CREATED || responseCode == HttpURLConnection.HTTP_OK) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Producto creado exitosamente", Toast.LENGTH_SHORT).show()
+
+                        // Redirigir a la actividad MainProducto
+                        val intent = Intent(this@MainNuevoProducto, MainProducto::class.java)
+                        startActivity(intent)
+                        finish() // Finalizar la actividad actual si ya no se necesita
                     }
                 } else {
                     val errorStream = conn.errorStream
-                    val errorMessage = errorStream?.bufferedReader()?.use { it.readText() } ?: "Sin mensaje de error"
-                    Log.e("Error de creación", "No se pudo crear el producto. Código de respuesta: $responseCode. Mensaje de error: $errorMessage")
+                    val errorMessage = errorStream?.bufferedReader()?.use { it.readText() } ?: "Error desconocido"
+                    Log.e("Error", "Código de respuesta: $responseCode. Mensaje: $errorMessage")
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(applicationContext, "Error al crear el producto: $responseMessage", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Error al crear el producto", Toast.LENGTH_SHORT).show()
                     }
                 }
+
+                conn.disconnect()
             } catch (e: Exception) {
+                Log.e("Error", "Error al crear el producto", e)
                 withContext(Dispatchers.Main) {
-                    Log.e("Error de conexión", "Error al conectar con la API: ${e.message}")
-                    Toast.makeText(applicationContext, "Error al conectar con la API", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Error al crear el producto", Toast.LENGTH_SHORT).show()
                 }
-                e.printStackTrace()
             }
         }
     }
+
 
 
 
     private fun checkStoragePermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
+        val permission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        return permission == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            REQUEST_STORAGE_PERMISSION
-        )
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_STORAGE_PERMISSION)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_STORAGE_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                abrirSelectorImagen()
-            } else {
-                Toast.makeText(this, "Permiso denegado para acceder al almacenamiento", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun cargarCategoriasProducto(selectedCategoryId: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+    private fun cargarCategoriasProducto(selectedIdCategoria: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val url = URL("https://tiaveneno.somee.com/api/Inventario/categorias")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
-
+                conn.setRequestProperty("Accept", "application/json")
                 val responseCode = conn.responseCode
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    val inputStream = conn.inputStream
-                    val responseText = inputStream.bufferedReader().use { it.readText() }
-                    val categoriasJsonArray = JSONArray(responseText) // Aquí cambiamos a JSONArray
 
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val responseText = conn.inputStream.bufferedReader().use { it.readText() }
+                    val categoriasJsonArray = JSONArray(responseText)
                     val categoriasList = mutableListOf<String>()
+
                     for (i in 0 until categoriasJsonArray.length()) {
-                        val categoria = categoriasJsonArray.getJSONObject(i)
-                        val idCategoria = categoria.getInt("idCategoria")
-                        val descripcion = categoria.getString("descripcion")
+                        val categoriaJson = categoriasJsonArray.getJSONObject(i)
+                        val descripcion = categoriaJson.getString("descripcion")
                         categoriasList.add(descripcion)
                     }
 
                     withContext(Dispatchers.Main) {
-                        val adapter = ArrayAdapter(
-                            this@MainNuevoProducto,
-                            android.R.layout.simple_spinner_item,
-                            categoriasList
-                        )
+                        val adapter = ArrayAdapter(this@MainNuevoProducto, android.R.layout.simple_spinner_item, categoriasList)
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                         idCrearProductoIdCategoria.adapter = adapter
 
-                        // Seleccionar la categoría si el ID está especificado
-                        if (selectedCategoryId >= 0) {
-                            val selectedIndex = categoriasList.indexOfFirst {
-                                it.contains(selectedCategoryId.toString())
-                            }
-                            if (selectedIndex >= 0) {
-                                idCrearProductoIdCategoria.setSelection(selectedIndex)
-                            }
+                        if (selectedIdCategoria != -1) {
+                            idCrearProductoIdCategoria.setSelection(selectedIdCategoria - 1)
                         }
                     }
                 } else {
                     Log.e("Error de carga", "No se pudo cargar las categorías. Código de respuesta: $responseCode")
                 }
+
+                conn.disconnect()
             } catch (e: Exception) {
-                Log.e("Error de conexión", "Error al conectar con la API: ${e.message}")
-                e.printStackTrace()
+                Log.e("Error de carga", "No se pudo cargar las categorías", e)
             }
         }
     }
-
 }
