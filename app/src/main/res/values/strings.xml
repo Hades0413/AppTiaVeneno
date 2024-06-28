@@ -8,4 +8,7 @@
         <item>YAPE</item>
     </string-array>
 
+    <string name="facebook_app_id">your-facebook-app-id</string>
+    <string name="default_web_client_id" translatable="false">your-web-client-id.apps.googleusercontent.com</string>
+
 </resources>

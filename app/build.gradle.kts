@@ -62,6 +62,11 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
 
+    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation ("com.google.android.gms:play-services-auth:20.2.0")
+    implementation ("com.facebook.android:facebook-android-sdk:[8,9)")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
