@@ -11,7 +11,9 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,9 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
     private lateinit var edtRegistrarVentaCantidad: EditText
     private lateinit var edtRegistrarVentaTotal: EditText
     private lateinit var btnRegistrarVentaAgregar: Button
-    private lateinit var btnRegistrarVentaVolver: Button
+    private lateinit var btnRegistrarVentaVolver: ImageButton
+    private lateinit var BalanceMonto: TextView
+
 
     private lateinit var productosJsonArray: JSONArray
 
@@ -63,7 +67,7 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
         edtRegistrarVentaTotal = findViewById(R.id.edtRegistrarVentaTotal)
         btnRegistrarVentaAgregar = findViewById(R.id.btnRegistrarVentaAgregar)
         btnRegistrarVentaVolver = findViewById(R.id.btnRegistrarVentaVolver)
-
+        BalanceMonto= findViewById(R.id.BalanceMonto)
         // Configurar eventos de clic
         btnRegistrarVentaAgregar.setOnClickListener(this)
         btnRegistrarVentaVolver.setOnClickListener { volver() }
@@ -239,7 +243,7 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
                     // Registro exitoso
                     withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Se registró correctamente", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@MainNuevaVenta, MainCategoria::class.java)
+                        val intent = Intent(this@MainNuevaVenta, MainVenta::class.java)
                         startActivity(intent)
                     }
                 } else {
@@ -332,11 +336,13 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
         val montoIGVStr = edtRegistrarVentaMontoIGV.text.toString()
         val totalStr = edtRegistrarVentaTotal.text.toString()
 
+
         if (totalStr.isNotEmpty() && montoIGVStr.isNotEmpty()) {
             val montoIGV = montoIGVStr.toDoubleOrNull() ?: 0.0
             val total = totalStr.toDoubleOrNull() ?: 0.0
             val montoTotal = montoIGV + total
             edtRegistrarVentaMontoTotal.setText(montoTotal.toString())
+            BalanceMonto.setText(montoTotal.toString())
             calcularCambio()
         } else {
             edtRegistrarVentaMontoTotal.setText("")

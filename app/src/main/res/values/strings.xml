@@ -6,13 +6,24 @@
         <item>VISA</item>
         <item>MASTERCARD</item>
         <item>YAPE</item>
+        <item>PLIN</item>
     </string-array>
 
     <string name="default_web_client_id" translatable="false">your-web-client-id.apps.googleusercontent.com</string>
-
-
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
     <string name="facebook_client_token">56789</string>
+
+
+    <string name="nombre_y_apellido">Nombre y Apellido</string>
+    <string name="n_mero_de_documento">Número de documento</string>
+    <string name="con_cu_nto_paga">Con cuánto paga</string>
+    <string name="cantidad_de_platos">Cantidad de platos</string>
+    <string name="documento_del_cliente">Documento del Cliente</string>
+    <string name="tipo_de_pago">Tipo de pago</string>
+    <string name="fecha_de_registro">Fecha de Registro</string>
+
+
+
 
 </resources>

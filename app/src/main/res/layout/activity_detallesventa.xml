@@ -22,26 +22,35 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:orientation="horizontal">
 
                     <EditText
+                        android:background="@drawable/search_background"
+                        android:drawableStart="@drawable/search"
+                        android:drawablePadding="20dp"
                         android:id="@+id/edtConsultarNroDocumento"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Busca tu comida"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textSize="14sp"
+                        android:textStyle="italic"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="30dp"
                         android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:autofillHints="" />
 
                     <Button
                         android:id="@+id/btnConsultarDetalle"
+                        android:backgroundTint="@color/green_700"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="20dp"
-                        android:layout_weight="1"
                         android:text="CONSULTAR" />
                 </LinearLayout>
 
@@ -49,207 +58,584 @@
                     android:id="@+id/textView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="40dp"
+                    android:layout_margin="10dp"
                     android:text="DETALLE VENTA"
                     android:textAlignment="center"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView33"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CLIENTE"
+                    android:layout_marginStart="12dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="TIPO DE PAGO"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+
+                    android:padding="12dp"
+                    >
+                    <TextView
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:text="DOCUMENTO CLIENTE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtDocClienteDetalle"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:paddingStart="10dp"
+                        android:hint="@string/documento_del_cliente"
+                        android:drawableStart="@drawable/package_variant"
+                        android:drawablePadding="1dp"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:background="@color/plomo"
+                       />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="NOMBRE:"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtNombreClienteDetalle"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:layout_width="200dp"
+                            android:layout_height="60dp"
+                            android:layout_marginTop="4dp"
+                            android:ems="10"
+                            android:hint="@string/nombre_y_apellido"
+                            android:drawablePadding="1dp"
+                            android:textSize="14sp"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:drawableStart="@drawable/account_icon"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="10dp"
+                        >
+                        <TextView
+                            android:id="@+id/textView25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NRO DOCUMENTO:"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtNroDocumentoDetalle"
+                            android:layout_width="158dp"
+                            android:layout_height="60dp"
+                            android:paddingStart="5dp"
+                            android:gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:hint="@string/n_mero_de_documento"
+                            android:textSize="14sp"
+                            android:drawablePadding="4dp"
+                            android:ems="10"
+                            android:drawableStart="@drawable/account_doc"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                      />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/txtTipoPagoDetalle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
+                    android:layout_marginStart="12dp"
+                    android:text="DETALLE DE PRODUCTO"
+                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
 
+                    android:padding="12dp"
+                    >
                 <TextView
-                    android:id="@+id/textView38"
-                    android:layout_width="match_parent"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="NUMERO DE DOCUMENTO "
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtNroDocumentoDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView39"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="DOCUMENTO CLIENTE"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtDocClienteDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView40"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="NOMBRE CLIENTE"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtNombreClienteDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView41"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="MONTO PAGO CON"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMontoPagoConDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView42"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="MONTO CAMBIO"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMontoCambioDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView43"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="MONTO SUB TOTAL"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMontoSubTotalDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView47"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="MONTO IGV"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMontoIGVDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView49"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="MONTO TOTAL"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtMontoTotalDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView51"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="FECHA DE REGISTRO"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtFechaRegistroDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:id="@+id/textView54"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
                     android:text="PRODUCTO"
-                    android:textStyle="bold" />
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                     />
 
                 <TextView
                     android:id="@+id/txtProductoDetalle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
+                    android:layout_height="50dp"
+                    android:paddingStart="10dp"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:hint="Producto"
+                    android:drawableStart="@drawable/package_variant"
+                    android:drawablePadding="1dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:background="@color/plomo"
+                    />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView56"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="CANTIDAD"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    >
 
-                <TextView
-                    android:id="@+id/txtCantidadDetalle"
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="start">
+
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:text="TIPO DE PAGO"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                             />
+
+                        <TextView
+                            android:id="@+id/txtTipoPagoDetalle"
+                            android:layout_width="180dp"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:paddingStart="10dp"
+                            android:hint="@string/tipo_de_pago"
+                            android:drawableStart="@drawable/credit_card_outline"
+                            android:drawablePadding="1dp"
+                            android:ems="10"
+                            android:layout_marginTop="4dp"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                      />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="end">
+
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:text="FECHA DE REGISTRO"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"
+                            android:textStyle="bold"
+                         />
+
+                        <TextView
+                            android:id="@+id/txtFechaRegistroDetalle"
+                            android:gravity="center"
+                            android:layout_width="180dp"
+                            android:layout_height="50dp"
+                            android:ems="10"
+                            android:textSize="14sp"
+                            android:paddingStart="10dp"
+                            android:drawableStart="@drawable/calendar_range"
+                            android:drawablePadding="1dp"
+                            android:hint="@string/fecha_de_registro"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:layout_marginTop="4dp"
+                            android:singleLine="true"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                          />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/textView29"
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:text="CANTIDAD PEDIDOS"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtCantidadDetalle"
+                            android:layout_width="180dp"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:textSize="14sp"
+                            android:hint="@string/cantidad_de_platos"
+                            android:drawableStart="@drawable/package_variant"
+                            android:drawablePadding="1dp"
+                            android:ems="10"
+                            android:paddingStart="10dp"
+                            android:layout_marginTop="4dp"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="end">
+
+                        <TextView
+                            android:id="@+id/textView31"
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:text="MONTO PAGO CON"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtMontoPagoConDetalle"
+                            android:gravity="center"
+                            android:layout_width="180dp"
+                            android:layout_height="50dp"
+                            android:ems="10"
+                            android:paddingStart="10dp"
+                            android:textSize="14sp"
+                            android:drawableStart="@drawable/cash_multiple"
+                            android:drawablePadding="1dp"
+                            android:hint="@string/con_cu_nto_paga"
+                            android:inputType="text"
+                            android:ellipsize="end"
+                            android:layout_marginTop="4dp"
+                            android:singleLine="true"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:background="@color/plomo"
+                             />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView58"
-                    android:layout_width="match_parent"
+                    android:layout_width="370dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="PRECIO PRODUCTO"
-                    android:textStyle="bold" />
+                    android:text="DETALLE DE MONTO"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="12dp"
+                    />
 
-                <TextView
-                    android:id="@+id/txtPrecioProductoDetalle"
+                <LinearLayout
+                    android:id="@+id/producto_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toBottomOf="@+id/textView40">
 
-                <TextView
-                    android:id="@+id/textView60"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="PRECIO VENTA"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
 
-                <TextView
-                    android:id="@+id/txtPrecioVentaDetalle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp" />
+                        android:layout_marginTop="8dp">
+
+                        <LinearLayout
+                            android:layout_width="165dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="165dp"
+                                android:layout_height="wrap_content"
+                                android:text="PRECIO PRODUCTO"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtPrecioProductoDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:ems="10"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:background="@color/plomo" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="145dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:text="PRECIO VENTA TOTAL"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtPrecioVentaDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:clickable="false"
+                                android:background="@color/plomo" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+
+                        android:layout_marginTop="8dp">
+
+                        <LinearLayout
+                            android:layout_width="165dp"
+                            android:layout_height="wrap_content"
+
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:text="MONTO SUB TOTAL"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtMontoSubTotalDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:paddingStart="10dp"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:background="@color/plomo" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="145dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:text="MONTO IGV"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/txtMontoIGVDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:background="@color/plomo" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="165dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView10"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:text="MONTO CAMBIO"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="@+id/guideline"
+                                app:layout_constraintTop_toBottomOf="@+id/edtRegistrarVentaMontoTotal" />
+
+                            <TextView
+                                android:id="@+id/txtMontoCambioDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:paddingStart="10dp"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:background="@color/plomo"
+                                app:layout_constraintStart_toStartOf="@+id/guideline"
+                                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="145dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+
+                            >
+
+                            <TextView
+                                android:id="@+id/textView32"
+                                android:layout_width="145dp"
+                                android:layout_height="wrap_content"
+                                android:text="MONTO TOTAL"
+                                android:textStyle="bold"
+                                app:layout_constraintStart_toStartOf="@+id/guideline"
+                                app:layout_constraintTop_toBottomOf="@+id/edtRegistrarVentaMontoIGV" />
+
+                            <TextView
+                                android:id="@+id/txtMontoTotalDetalle"
+                                android:layout_width="145dp"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:focusable="false"
+                                android:clickable="false"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:drawableStart="@drawable/currency_usd"
+                                android:background="@color/plomo"
+                                android:paddingStart="10dp"
+                                app:layout_constraintStart_toStartOf="@+id/guideline"
+                                app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -265,6 +651,7 @@
                         android:layout_marginEnd="100dp"
                         android:layout_marginBottom="100dp"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/green_700"
                         android:text="NUEVA VENTA" />
                 </LinearLayout>
 
