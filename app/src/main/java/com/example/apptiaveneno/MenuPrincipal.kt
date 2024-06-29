@@ -37,6 +37,8 @@ class MenuPrincipal : AppCompatActivity() {
     private lateinit var idDescripcionProducto: EditText
     private lateinit var allProducts: JSONArray
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

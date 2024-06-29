@@ -33,9 +33,9 @@
 
     <color name="menu_icon">#701313</color>
     <color name="transparente">#00FFFFFF</color>
+    <color name="dark_gray_color">#9E9E9E</color>
 
-
-    <color name="plomo">#ACACAC</color>
+    <color name="plomo">#ECECEC</color>
 
 </resources>
 

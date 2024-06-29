@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -36,8 +37,8 @@ class Login : AppCompatActivity() {
     private lateinit var edtClave: EditText
     private lateinit var idRegistrar: TextView
     private lateinit var btnLogin: ConstraintLayout
-    private lateinit var btnGoogle: Button
-    private lateinit var btnFacebook: Button
+    private lateinit var btnGoogle: ImageButton
+    private lateinit var btnFacebook: ImageButton
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -160,28 +161,7 @@ class Login : AppCompatActivity() {
                     updateUI(null)
                 }
             }
-    }private fun performGraphApiRequest(accessToken: String) {
-        val url = URL("https://graph.facebook.com/me?access_token=$accessToken")
-
-        val conn = url.openConnection() as HttpURLConnection
-        conn.requestMethod = "GET"
-        conn.setRequestProperty("Content-Type", "application/json")
-
-        val responseCode = conn.responseCode
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            val reader = BufferedReader(InputStreamReader(conn.inputStream))
-            val response = StringBuilder()
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                response.append(line)
-            }
-            reader.close()
-            // Handle the response
-        } else {
-            Log.e("GraphApiRequest", "Error en la respuesta de la API: $responseCode")
-        }
     }
-
 
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
