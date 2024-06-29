@@ -50,6 +50,7 @@ class MainVenta : AppCompatActivity() {
     private lateinit var comidasBtn: LinearLayout
     private lateinit var categoriasBtn: LinearLayout
     private lateinit var ventasBtn: LinearLayout
+    private lateinit var modoBtn: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,15 +77,18 @@ class MainVenta : AppCompatActivity() {
         btnConsultarDetalle.setOnClickListener { consultarDetalle() }
         btnNuevaVentaDetalle.setOnClickListener { NuevaVenta() }
 
+
         //bottom_app_bar
         homeBtn = findViewById(R.id.homeBtn)
         comidasBtn = findViewById(R.id.comidasBtn)
         categoriasBtn = findViewById(R.id.categoriasBtn)
         ventasBtn = findViewById(R.id.ventasBtn)
+        modoBtn = findViewById(R.id.modoBtn)
         homeBtn.setOnClickListener { home() }
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
         ventasBtn.setOnClickListener { verventa() }
+        modoBtn.setOnClickListener { vermodo() }
 
     }
 
@@ -103,6 +107,10 @@ class MainVenta : AppCompatActivity() {
     }
     private fun vercategoria() {
         val intent = Intent(this, MainCategoria::class.java)
+        startActivity(intent)
+    }
+    private fun vermodo() {
+        val intent = Intent(this, MainColaborador::class.java)
         startActivity(intent)
     }
 
