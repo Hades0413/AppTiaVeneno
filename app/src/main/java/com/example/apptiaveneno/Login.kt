@@ -181,7 +181,6 @@ class Login : AppCompatActivity() {
     private fun performLoginWithAPI(correo: String, clave: String): Usuario? {
         return try {
             val url = URL("https://tiaveneno.somee.com/api/Usuario")
-
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "GET"
             conn.setRequestProperty("Content-Type", "application/json")
@@ -242,13 +241,21 @@ class Login : AppCompatActivity() {
                 }
 
                 if (usuario != null) {
+                    // Guardar datos del usuario en SharedPreferences
+                    val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    with(sharedPreferences.edit()) {
+                        putInt("idUsuario", usuario.idUsuario)
+                        putString("nombreCompleto", usuario.nombreCompleto)
+                        putString("correo", usuario.correo)
+                        putString("clave", usuario.clave)
+                        apply()
+                    }
+
                     runOnUiThread {
-                        // Redirige a MenuPrincipal después del inicio de sesión exitoso
-                        val intent = Intent(this@Login, MainPerfilUsuario::class.java)
-                        // Puedes enviar el objeto Usuario si es necesario
-                        intent.putExtra("usuario", usuario)
+                        // Enviar los datos del usuario a MainPerfilUsuario
+                        val intent = Intent(this@Login, MenuPrincipal::class.java)
                         startActivity(intent)
-                        finish()
+                        finish() // Asegúrate de finalizar Login si ya no se necesita
                     }
                 } else {
                     runOnUiThread {
@@ -258,6 +265,10 @@ class Login : AppCompatActivity() {
             }
         }
     }
+
+
+
+
 
 
 
