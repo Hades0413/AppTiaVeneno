@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDFCFC"
-    tools:context=".HomeActivity">
+    tools:context=".MenuPrincipal">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -59,7 +59,7 @@
                     app:layout_constraintVertical_bias="1.0" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/idIrPerfilUsuario"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginEnd="32dp"

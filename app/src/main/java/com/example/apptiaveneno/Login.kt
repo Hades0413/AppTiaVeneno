@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.apptiaveneno.Entity.Usuario
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -36,6 +37,7 @@ class Login : AppCompatActivity() {
     private lateinit var edtCorreo: EditText
     private lateinit var edtClave: EditText
     private lateinit var idRegistrar: TextView
+    private lateinit var idIrCambioContrasena: TextView
     private lateinit var btnLogin: ConstraintLayout
     private lateinit var btnGoogle: ImageButton
     private lateinit var btnFacebook: ImageButton
@@ -56,6 +58,7 @@ class Login : AppCompatActivity() {
         edtCorreo = findViewById(R.id.Correo)
         edtClave = findViewById(R.id.editTextContrasenia)
         idRegistrar = findViewById(R.id.idDataCategoriaDescripcion)
+        idIrCambioContrasena = findViewById(R.id.idIrCambioContrasena)
         btnLogin = findViewById(R.id.login_btn)
         btnGoogle = findViewById(R.id.btnGoogle)
         btnFacebook = findViewById(R.id.btnFacebook)
@@ -113,6 +116,9 @@ class Login : AppCompatActivity() {
 
         idRegistrar.setOnClickListener {
             registrar()
+        }
+        idIrCambioContrasena.setOnClickListener {
+            ircambiocontrasena()
         }
     }
 
@@ -172,45 +178,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun login(correo: String, clave: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (correo.isEmpty() && clave.isEmpty()) {
-                runOnUiThread {
-                    showSweetAlertDialog("Campos incompletos debes ingresar usuario y contraseña.")
-                }
-            } else if (correo.isEmpty()) {
-                runOnUiThread {
-                    showSweetAlertDialog("Debes de ingresar un usuario.")
-                }
-            } else if (clave.isEmpty()) {
-                runOnUiThread {
-                    showSweetAlertDialog("Debes de ingresar una contraseña.")
-                }
-            } else {
-                val successWithAPI = try {
-                    performLoginWithAPI(correo, clave)
-                } catch (e: Exception) {
-                    runOnUiThread {
-                        showSweetAlertDialog("Error de conexión con la API")
-                    }
-                    false
-                }
-
-                if (successWithAPI) {
-                    runOnUiThread {
-                        startActivity(Intent(this@Login, MenuPrincipal::class.java))
-                        finish()
-                    }
-                } else {
-                    runOnUiThread {
-                        showSweetAlertDialog("Usuario y/o Contraseña incorrectos")
-                    }
-                }
-            }
-        }
-    }
-
-    private fun performLoginWithAPI(correo: String, clave: String): Boolean {
+    private fun performLoginWithAPI(correo: String, clave: String): Usuario? {
         return try {
             val url = URL("https://tiaveneno.somee.com/api/Usuario")
 
@@ -234,18 +202,65 @@ class Login : AppCompatActivity() {
                     val correoUsuario = usuario.getString("correo")
                     val claveUsuario = usuario.getString("clave")
                     if (correo == correoUsuario && clave == claveUsuario) {
-                        return true
+                        val idUsuario = usuario.getInt("idUsuario")
+                        val nombreCompleto = usuario.getString("nombreCompleto")
+                        return Usuario(idUsuario, nombreCompleto, correoUsuario, claveUsuario)
                     }
                 }
             } else {
                 Log.e("Login", "Error en la respuesta de la API: $responseCode")
             }
-            false
+            null
         } catch (e: Exception) {
             Log.e("Login", "Error al realizar la solicitud a la API", e)
-            false
+            null
         }
     }
+
+    private fun login(correo: String, clave: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (correo.isEmpty() && clave.isEmpty()) {
+                runOnUiThread {
+                    showSweetAlertDialog("Campos incompletos debes ingresar usuario y contraseña.")
+                }
+            } else if (correo.isEmpty()) {
+                runOnUiThread {
+                    showSweetAlertDialog("Debes de ingresar un usuario.")
+                }
+            } else if (clave.isEmpty()) {
+                runOnUiThread {
+                    showSweetAlertDialog("Debes de ingresar una contraseña.")
+                }
+            } else {
+                val usuario = try {
+                    performLoginWithAPI(correo, clave)
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        showSweetAlertDialog("Error de conexión con la API")
+                    }
+                    null
+                }
+
+                if (usuario != null) {
+                    runOnUiThread {
+                        // Redirige a MenuPrincipal después del inicio de sesión exitoso
+                        val intent = Intent(this@Login, MainPerfilUsuario::class.java)
+                        // Puedes enviar el objeto Usuario si es necesario
+                        intent.putExtra("usuario", usuario)
+                        startActivity(intent)
+                        finish()
+                    }
+                } else {
+                    runOnUiThread {
+                        showSweetAlertDialog("Usuario y/o Contraseña incorrectos")
+                    }
+                }
+            }
+        }
+    }
+
+
+
 
     private fun showSweetAlertDialog(message: String) {
         val builder = AlertDialog.Builder(this)
@@ -268,6 +283,12 @@ class Login : AppCompatActivity() {
 
     private fun registrar() {
         val intent = Intent(this, MainRegistrar::class.java)
+        startActivity(intent)
+    }
+
+
+    private fun ircambiocontrasena() {
+        val intent = Intent(this, CambioContrasenaActivity::class.java)
         startActivity(intent)
     }
 }

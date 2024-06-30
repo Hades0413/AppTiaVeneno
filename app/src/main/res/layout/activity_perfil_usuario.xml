@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".MainPerfilUsuario">
+
+    <TextView
+        android:id="@+id/txtTituloPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perfil del Usuario"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/labelIdUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtTituloPerfil"
+        android:layout_marginTop="-14dp"
+        android:text="ID de Usuario:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txtIdUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/labelIdUsuario"
+        android:layout_alignBaseline="@id/labelIdUsuario"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/labelNombreCompleto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre Completo:"
+        android:textSize="18sp"
+        android:layout_below="@id/labelIdUsuario"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/txtNombreCompleto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/labelNombreCompleto"
+        android:layout_alignBaseline="@id/labelNombreCompleto"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/labelCorreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Correo Electrónico:"
+        android:textSize="18sp"
+        android:layout_below="@id/labelNombreCompleto"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/txtCorreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_toEndOf="@id/labelCorreo"
+        android:layout_alignBaseline="@id/labelCorreo"
+        android:layout_marginStart="8dp"/>
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Volver"
+        android:layout_below="@id/labelCorreo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"/>
+
+</RelativeLayout>

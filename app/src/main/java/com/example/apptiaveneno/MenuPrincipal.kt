@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 class MenuPrincipal : AppCompatActivity() {
+    private lateinit var idIrPerfilUsuario: ImageView
     private lateinit var categoriaAdapter: CategoriaMenuPrincipalAdapter
     private lateinit var productoAdapter: ProductoMenuPrincipalAdapter
     private lateinit var comidasBtn: LinearLayout
@@ -49,6 +51,7 @@ class MenuPrincipal : AppCompatActivity() {
             insets
         }
 
+        idIrPerfilUsuario = findViewById(R.id.idIrPerfilUsuario)
         comidasBtn = findViewById(R.id.comidasBtn)
         categoriasBtn = findViewById(R.id.categoriasBtn)
         ventasBtn = findViewById(R.id.ventasBtn)
@@ -59,6 +62,9 @@ class MenuPrincipal : AppCompatActivity() {
 
         val layoutManager = GridLayoutManager(this, 1, RecyclerView.HORIZONTAL, false)
         listaCategoriaMenuPrincipal.layoutManager = layoutManager
+
+        idIrPerfilUsuario.setOnClickListener { verperfil() }
+
 
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
@@ -76,6 +82,11 @@ class MenuPrincipal : AppCompatActivity() {
         })
     }
 
+
+    private fun verperfil() {
+        val intent = Intent(this, MainPerfilUsuario::class.java)
+        startActivity(intent)
+    }
 
     private fun verproducto() {
         val intent = Intent(this, MainProducto::class.java)
