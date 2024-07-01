@@ -5,32 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/peach">
+    android:padding="10dp"
+    android:background="@drawable/back_testimonial">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="@color/white"
+
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:gravity="center">
 
+
             <ImageView
                 android:id="@+id/fotousu"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:srcCompat="@drawable/logo_tia_modified" />
+                app:srcCompat="@drawable/carmella" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,50 +39,83 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/idcodigotestimonio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Código"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:paddingBottom="4dp"/>
 
-                <TextView
-                    android:id="@+id/idcodigotestimonio_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:paddingBottom="8dp"/>
 
-                <TextView
-                    android:id="@+id/text25"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nombre Usuario"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:paddingBottom="4dp"/>
+                    android:orientation="horizontal"
+                    android:gravity="end|top"
+                    >
+
+                    <TextView
+                        android:id="@+id/idcodigotestimonio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Código: "
+
+                        android:textColor="@color/black"
+
+                        android:textSize="16sp"
+                        android:paddingBottom="4dp"/>
+                    <TextView
+                        android:id="@+id/idcodigotestimonio_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23"
+
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:paddingBottom="8dp"/>
+
+
+
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/nomusu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Martin Vizcarra"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp"
                     android:textColor="@color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="18sp"/>
+
+                <RatingBar
+                    android:id="@+id/ratingBarTestimonios"
+                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressTint="@color/yellow_700"
+                    android:rating="5"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:stepSize="1" />
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UN SERVICIO IMPRESIONANTE"
+                    android:textStyle="bold|italic"
+                    />
 
                 <TextView
                     android:id="@+id/text26"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Testimonio"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     android:textSize="16sp"
                     android:paddingBottom="4dp"/>
+
+
 
                 <TextView
                     android:id="@+id/testimonio"

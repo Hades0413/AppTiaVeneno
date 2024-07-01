@@ -3,6 +3,7 @@ package com.example.apptiaveneno
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,36 @@ class MainCategoriaPorProducto : AppCompatActivity() {
             val intent = Intent(this, MenuPrincipal::class.java)
             startActivity(intent)
             finish() // Opcional: cerrar la actividad actual si no se espera regresar
+        }
+
+        val homeButton = findViewById<LinearLayout>(R.id.homeBtn)
+        homeButton.setOnClickListener {
+            val intent = Intent(this, MenuPrincipal::class.java)
+            startActivity(intent)
+        }
+
+        val comidasButton = findViewById<LinearLayout>(R.id.comidasBtn)
+        comidasButton.setOnClickListener {
+            val intent = Intent(this, MainProducto::class.java)
+            startActivity(intent)
+        }
+
+        val ventasButton = findViewById<LinearLayout>(R.id.ventasBtn)
+        ventasButton.setOnClickListener {
+            val intent = Intent(this, MainVenta::class.java)
+            startActivity(intent)
+        }
+
+        val categoriasButton = findViewById<LinearLayout>(R.id.categoriasBtn)
+        categoriasButton.setOnClickListener {
+            val intent = Intent(this, MainCategoria::class.java)
+            startActivity(intent)
+        }
+
+        val goatsButton = findViewById<LinearLayout>(R.id.modoBtn)
+        goatsButton.setOnClickListener {
+            val intent = Intent(this, MainColaborador::class.java)
+            startActivity(intent)
         }
 
         categoriaId = intent.getIntExtra("categoriaId", 0)

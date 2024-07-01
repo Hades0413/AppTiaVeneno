@@ -1,6 +1,10 @@
 package com.example.apptiaveneno
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,6 +24,45 @@ class MainTestimonio : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_testimonio)
+        val backButton = findViewById<ImageButton>(R.id.regresarMenuPrincipal)
+        backButton.setOnClickListener {
+            val intent = Intent(this, MenuPrincipal::class.java)
+            startActivity(intent)
+            finish() // Opcional: cerrar la actividad actual si no se espera regresar
+        }
+
+        // Configurar otros botones para navegar a diferentes partes de la aplicación
+        val homeButton = findViewById<LinearLayout>(R.id.homeBtn)
+        homeButton.setOnClickListener {
+            val intent = Intent(this, MenuPrincipal::class.java)
+            startActivity(intent)
+        }
+
+        val comidasButton = findViewById<LinearLayout>(R.id.comidasBtn)
+        comidasButton.setOnClickListener {
+            val intent = Intent(this, MainProducto::class.java)
+            startActivity(intent)
+        }
+
+        val ventasButton = findViewById<LinearLayout>(R.id.ventasBtn)
+        ventasButton.setOnClickListener {
+            val intent = Intent(this, MainVenta::class.java)
+            startActivity(intent)
+        }
+
+        val categoriasButton = findViewById<LinearLayout>(R.id.categoriasBtn)
+        categoriasButton.setOnClickListener {
+            val intent = Intent(this, MainCategoria::class.java)
+            startActivity(intent)
+        }
+
+        val goatsButton = findViewById<LinearLayout>(R.id.modoBtn)
+        goatsButton.setOnClickListener {
+            val intent = Intent(this, MainColaborador::class.java)
+            startActivity(intent)
+        }
+
+
 
         // Configuración de padding para ventanas con bordes
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -63,4 +106,6 @@ class MainTestimonio : AppCompatActivity() {
         // Notificar al adaptador que los datos han cambiado
         testimonioAdapter.notifyDataSetChanged()
     }
+
+
 }

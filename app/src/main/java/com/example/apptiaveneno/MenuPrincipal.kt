@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -28,7 +29,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 class MenuPrincipal : AppCompatActivity() {
-    private lateinit var textView4: TextView
+    private lateinit var idIrTestimonios: Button
     private lateinit var idIrPerfilUsuario: ImageView
     private lateinit var categoriaAdapter: CategoriaMenuPrincipalAdapter
     private lateinit var productoAdapter: ProductoMenuPrincipalAdapter
@@ -52,7 +53,7 @@ class MenuPrincipal : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        textView4 = findViewById(R.id.textView4)
+        idIrTestimonios = findViewById(R.id.idIrTestimonios)
 
         idIrPerfilUsuario = findViewById(R.id.idIrPerfilUsuario)
         comidasBtn = findViewById(R.id.comidasBtn)
@@ -75,7 +76,7 @@ class MenuPrincipal : AppCompatActivity() {
         modoBtn.setOnClickListener { vermodo()}
 
 
-        textView4.setOnClickListener { vertestimonios() }
+        idIrTestimonios.setOnClickListener { vertestimonios() }
 
         idDescripcionProducto.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
