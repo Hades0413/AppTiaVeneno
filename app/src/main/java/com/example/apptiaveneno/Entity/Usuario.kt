@@ -15,7 +15,7 @@ data class Usuario(
         parcel.readString() ?: "",
         parcel.readString() ?: ""
     ) {
-        // Reinitialization of properties from parcel data
+
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

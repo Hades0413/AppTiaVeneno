@@ -54,7 +54,7 @@ class MainColaborador : AppCompatActivity() {
         // Conectar a Firebase y obtener datos de colaboradores
         conectarFirebase()
 
-        // Ejemplo de cómo guardar datos en Firebase Realtime Database
+        // guardar datos
         guardarDatos()
 
         //bottom_app_bar
@@ -98,7 +98,7 @@ class MainColaborador : AppCompatActivity() {
             // Referencia a la base de datos de Firebase
             database = FirebaseDatabase.getInstance().reference.child("colaboradores")
 
-            // Escuchador para obtener datos de colaboradores
+            // obtener datos de colaboradores
             database.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     try {
@@ -128,7 +128,7 @@ class MainColaborador : AppCompatActivity() {
 
     private fun guardarDatos() {
         try {
-            // Crear una lista de colaboradores
+            // Crear lista de colaboradores
             val colaboradores = listOf(
                 Colaborador("OLANO FARFAN", "I202211470", "JORGE FABRIZIO", "olano"),
                 Colaborador("SIFUENTES ZEVALLOS", "I202212046", "CLAUDIA YADIRA", "sifuentes"),

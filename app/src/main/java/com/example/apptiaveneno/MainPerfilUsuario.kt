@@ -19,7 +19,6 @@ class MainPerfilUsuario : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil_usuario)
 
-        // Inicializar las vistas
         textViewNombre = findViewById(R.id.txtNombreCompleto)
         textViewCorreo = findViewById(R.id.txtCorreo)
         textViewId = findViewById(R.id.txtIdUsuario)
@@ -28,7 +27,6 @@ class MainPerfilUsuario : AppCompatActivity() {
         btnVolver.setOnClickListener { volver() }
         idCerrarSesion.setOnClickListener { cerrarSesion() }
 
-        // Cargar datos del usuario
         cargarDatosUsuario()
     }
 
@@ -43,7 +41,7 @@ class MainPerfilUsuario : AppCompatActivity() {
             textViewCorreo.text = correo
             textViewId.text = idUsuario.toString()
         } else {
-            // Opcional: Manejar el caso cuando no hay datos disponibles
+            // Manejar en caso no haya datos disponibles
             textViewNombre.text = "No disponible"
             textViewCorreo.text = "No disponible"
             textViewId.text = "No disponible"
@@ -51,15 +49,13 @@ class MainPerfilUsuario : AppCompatActivity() {
     }
 
     private fun volver() {
-        // Volver al MenuPrincipal
         val intent = Intent(this, MenuPrincipal::class.java)
         startActivity(intent)
-        finish() // Finalizar la actividad actual
+        finish()
     }
 
     private fun cerrarSesion() {
 
-        // Redirigir al Login o pantalla de inicio
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
         finish() // Finalizar la actividad actual

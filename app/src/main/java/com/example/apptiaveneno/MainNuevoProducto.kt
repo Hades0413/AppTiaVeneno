@@ -72,7 +72,7 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
         }
 
         // Cargar categorías al iniciar la actividad
-        cargarCategoriasProducto(-1) // Aquí puedes pasar el ID de la categoría seleccionada si lo deseas
+        cargarCategoriasProducto(-1)
     }
 
     override fun onClick(v: View) {
@@ -289,7 +289,7 @@ class MainNuevoProducto : AppCompatActivity(), View.OnClickListener {
                         // Redirigir a la actividad MainProducto
                         val intent = Intent(this@MainNuevoProducto, MainProducto::class.java)
                         startActivity(intent)
-                        finish() // Finalizar la actividad actual si ya no se necesita
+                        finish()
                     }
                 } else {
                     val errorStream = conn.errorStream

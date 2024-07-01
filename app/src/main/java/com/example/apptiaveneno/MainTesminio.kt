@@ -28,10 +28,11 @@ class MainTestimonio : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, MenuPrincipal::class.java)
             startActivity(intent)
-            finish() // Opcional: cerrar la actividad actual si no se espera regresar
+            finish()
         }
 
-        // Configurar otros botones para navegar a diferentes partes de la aplicación
+
+        //bottom_app_bar
         val homeButton = findViewById<LinearLayout>(R.id.homeBtn)
         homeButton.setOnClickListener {
             val intent = Intent(this, MenuPrincipal::class.java)

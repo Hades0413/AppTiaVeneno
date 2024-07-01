@@ -89,7 +89,6 @@ class MainProducto : AppCompatActivity() {
 
             } catch (e: JSONException) {
                 e.printStackTrace()
-                // Manejar la excepción, por ejemplo, mostrar un mensaje de error
                 Toast.makeText(this@MainProducto, "Error al obtener los datos del producto", Toast.LENGTH_SHORT).show()
             }
         }
@@ -161,7 +160,7 @@ class MainProducto : AppCompatActivity() {
                 // Crear un adaptador personalizado para mostrar los productos en un ListView
                 val adapter = ProductoAdapter(this@MainProducto, jsonArray)
 
-                // Asignar el adaptador al ListView en tu layout
+                // Asignar el adaptador al ListView en el layout
                 runOnUiThread {
                     listarProducto.adapter = adapter
                 }

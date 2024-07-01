@@ -265,7 +265,7 @@ class Login : AppCompatActivity() {
                         // Enviar los datos del usuario a MainPerfilUsuario
                         val intent = Intent(this@Login, MenuPrincipal::class.java)
                         startActivity(intent)
-                        finish() // Asegúrate de finalizar Login si ya no se necesita
+                        finish()
                     }
                 } else {
                     runOnUiThread {

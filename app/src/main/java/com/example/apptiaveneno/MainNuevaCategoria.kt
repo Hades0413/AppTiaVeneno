@@ -101,7 +101,7 @@ class MainNuevaCategoria : AppCompatActivity(), View.OnClickListener {
                         }
                     }
                 } else {
-                    // Otro estado de respuesta, por ejemplo, error del servidor
+                    // Error del servidor
                     launch(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Error en el servidor", Toast.LENGTH_SHORT).show()
                     }

@@ -24,6 +24,8 @@ class CategoriaPorProductoMenuPrincipalAdapter(
 ) : RecyclerView.Adapter<CategoriaPorProductoMenuPrincipalAdapter.ViewHolder>() {
 
 
+    //Estrellas del Menu_Principal
+    //Random
     // Definir los patrones de calificación
     private val pattern1 = intArrayOf(5, 3, 5, 4, 3)  // Primera orden
     private val pattern2 = intArrayOf(4, 5, 3, 5, 4)  // Segunda orden

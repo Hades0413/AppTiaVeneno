@@ -37,9 +37,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="32dp"
-                    android:text="Mileder y Gremco"
+                    android:text="Mileder y Gremco 09/07/2023"
                     android:textColor="#dd3d00"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -227,6 +227,7 @@
                     android:layout_weight="1"
                     android:backgroundTint="#FF5722"
                     android:text="Testimonios"
+                    android:textColor="#FBFAFA"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/listaProductoMenuPrincipal" />
 

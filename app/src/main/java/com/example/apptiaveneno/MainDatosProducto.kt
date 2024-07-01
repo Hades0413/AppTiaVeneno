@@ -206,7 +206,7 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    // Método llamado cuando se hace clic en la imagen
+    // Método para llamar cuando se hace clic en la imagen
     fun seleccionarImagen(view: View) {
         // Verificar permisos de almacenamiento antes de seleccionar la imagen
         if (checkStoragePermission()) {
@@ -346,6 +346,9 @@ class MainDatosProducto : AppCompatActivity(), View.OnClickListener {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Producto actualizado correctamente", Toast.LENGTH_SHORT).show()
+                        // Redirigir a MainProducto
+                        val intent = Intent(applicationContext, MainProducto::class.java)
+                        startActivity(intent)
                     }
                 } else {
                     val errorStream = conn.errorStream

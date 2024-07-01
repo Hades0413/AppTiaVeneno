@@ -52,7 +52,6 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_venta)
 
-        // Inicializar vistas
         edtRegistrarVentaTipoPago = findViewById(R.id.edtRegistrarVentaTipoPago)
         edtRegistarVentaDocCliente = findViewById(R.id.edtRegistarVentaDocCliente)
         edtRegistrarVentaNomCliente = findViewById(R.id.edtRegistrarVentaNomCliente)
@@ -207,7 +206,7 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
                     put("montoSubTotal", montoSubTotal)
                     put("montoIGV", montoIGV)
                     put("montoTotal", montoTotal)
-                    put("fechaRegistro", "2024-06-20") // Ajustar según el formato de tu API
+                    put("fechaRegistro", "2024-07-01")
                     put("oDetalleVenta", JSONArray().apply {
                         put(JSONObject().apply {
                             put("idDetalleVenta", 0)
@@ -247,7 +246,7 @@ class MainNuevaVenta : AppCompatActivity(), View.OnClickListener {
                         startActivity(intent)
                     }
                 } else {
-                    // Otro estado de respuesta, por ejemplo, error del servidor
+                    // Error del servidor
                     withContext(Dispatchers.Main) {
                         Toast.makeText(applicationContext, "Error en el servidor", Toast.LENGTH_SHORT).show()
                     }
