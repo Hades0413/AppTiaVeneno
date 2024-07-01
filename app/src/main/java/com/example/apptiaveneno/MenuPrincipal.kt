@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -27,6 +28,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 class MenuPrincipal : AppCompatActivity() {
+    private lateinit var textView4: TextView
     private lateinit var idIrPerfilUsuario: ImageView
     private lateinit var categoriaAdapter: CategoriaMenuPrincipalAdapter
     private lateinit var productoAdapter: ProductoMenuPrincipalAdapter
@@ -50,6 +52,7 @@ class MenuPrincipal : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        textView4 = findViewById(R.id.textView4)
 
         idIrPerfilUsuario = findViewById(R.id.idIrPerfilUsuario)
         comidasBtn = findViewById(R.id.comidasBtn)
@@ -69,7 +72,10 @@ class MenuPrincipal : AppCompatActivity() {
         categoriasBtn.setOnClickListener { vercategoria() }
         comidasBtn.setOnClickListener { verproducto() }
         ventasBtn.setOnClickListener { verventa() }
-        modoBtn.setOnClickListener { vermodo() }
+        modoBtn.setOnClickListener { vermodo()}
+
+
+        textView4.setOnClickListener { vertestimonios() }
 
         idDescripcionProducto.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -82,6 +88,10 @@ class MenuPrincipal : AppCompatActivity() {
         })
     }
 
+    private fun vertestimonios() {
+        val intent = Intent(this, MainTestimonio::class.java)
+        startActivity(intent)
+    }
 
     private fun verperfil() {
         val intent = Intent(this, MainPerfilUsuario::class.java)
