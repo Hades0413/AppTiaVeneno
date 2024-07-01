@@ -13,6 +13,7 @@ class MainPerfilUsuario : AppCompatActivity() {
     private lateinit var textViewCorreo: TextView
     private lateinit var textViewId: TextView
     private lateinit var btnVolver: Button
+    private lateinit var idCerrarSesion: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +24,9 @@ class MainPerfilUsuario : AppCompatActivity() {
         textViewCorreo = findViewById(R.id.txtCorreo)
         textViewId = findViewById(R.id.txtIdUsuario)
         btnVolver = findViewById(R.id.btnVolver)
+        idCerrarSesion = findViewById(R.id.idCerrarSesion)
         btnVolver.setOnClickListener { volver() }
+        idCerrarSesion.setOnClickListener { cerrarSesion() }
 
         // Cargar datos del usuario
         cargarDatosUsuario()
@@ -53,6 +56,16 @@ class MainPerfilUsuario : AppCompatActivity() {
         startActivity(intent)
         finish() // Finalizar la actividad actual
     }
+
+    private fun cerrarSesion() {
+
+        // Redirigir al Login o pantalla de inicio
+        val intent = Intent(this, Login::class.java)
+        startActivity(intent)
+        finish() // Finalizar la actividad actual
+    }
+
+    /*
     private fun cerrarSesion() {
         // Limpiar los datos del usuario en SharedPreferences
         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
@@ -66,6 +79,8 @@ class MainPerfilUsuario : AppCompatActivity() {
         startActivity(intent)
         finish() // Finalizar la actividad actual
     }
+
+     */
 
 
 }

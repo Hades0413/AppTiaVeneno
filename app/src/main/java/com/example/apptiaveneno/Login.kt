@@ -142,19 +142,29 @@ class Login : AppCompatActivity() {
             callbackManager.onActivityResult(requestCode, resultCode, data)
         }
     }
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
+                    if (user != null) {
+                        // Guardar datos del usuario en SharedPreferences
+                        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putString("nombreCompleto", user.displayName)
+                            putString("correo", user.email)
+                            putString("clave", "N/A") // No se tiene la clave real del usuario en Google Auth
+                            apply()
+                        }
+                    }
                     updateUI(user)
                 } else {
                     updateUI(null)
                 }
             }
     }
+
 
     private fun handleFacebookAccessToken(token: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(token.token)
