@@ -132,8 +132,7 @@ class MainColaborador : AppCompatActivity() {
             val colaboradores = listOf(
                 Colaborador("OLANO FARFAN", "I202211470", "JORGE FABRIZIO", "olano"),
                 Colaborador("SIFUENTES ZEVALLOS", "I202212046", "CLAUDIA YADIRA", "sifuentes"),
-                Colaborador("JAIME GOMERO", "I202214869", "EDUARDO MIGUEL", "hades"),
-                Colaborador("PEREZ SINCHITULLO", "I202021282", "NICOLAS CHRISTOPPER", "perez")
+                Colaborador("JAIME GOMERO", "I202214869", "EDUARDO MIGUEL", "hades")
             )
 
             // Verificar si cada colaborador ya existe antes de agregarlo

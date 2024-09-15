@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "880079088106",
-    "firebase_url": "https://tiaveneno-9b71b-default-rtdb.firebaseio.com",
-    "project_id": "tiaveneno-9b71b",
-    "storage_bucket": "tiaveneno-9b71b.appspot.com"
+    "project_number": "588939321418",
+    "firebase_url": "https://apptiaveneno-ed80d-default-rtdb.firebaseio.com",
+    "project_id": "apptiaveneno-ed80d",
+    "storage_bucket": "apptiaveneno-ed80d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:880079088106:android:25c512eba1ea1476366a93",
+        "mobilesdk_app_id": "1:588939321418:android:5f6e1b00263d07580f46b3",
         "android_client_info": {
           "package_name": "com.example.apptiaveneno"
         }
       },
       "oauth_client": [
         {
-          "client_id": "880079088106-nnh50qr38vrd6g9635pivs25mjc1fac5.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.apptiaveneno",
-            "certificate_hash": "fc07de59c711a42610c664250d910dea5d63bdcb"
-          }
-        },
-        {
-          "client_id": "880079088106-r9un1kqenhmngf9vkia10ilobp00dga9.apps.googleusercontent.com",
+          "client_id": "588939321418-28smf8b32evfa0bkhqf1tc16qsh5ihbj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCdZT6xejIQs0_ygFT_pnqnqYQ74jDn8yU"
+          "current_key": "AIzaSyC1SyOZKXNkFVd_0HM-8Z4fQTZtLm_anQM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "880079088106-r9un1kqenhmngf9vkia10ilobp00dga9.apps.googleusercontent.com",
+              "client_id": "588939321418-28smf8b32evfa0bkhqf1tc16qsh5ihbj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
